@@ -75,6 +75,11 @@ nanogame.presenter.black_confirm = function(){
     nanogame.debug.writeMessage( "nanogame.black_confirm: done" );
 };
 
+nanogame.presenter.get_selector_selection = function(element){
+    const selection = element.value ;
+    return selection;
+};
+
 nanogame.presenter.set_selector_selection = function(element, selection){
     element.value = selection;
 };

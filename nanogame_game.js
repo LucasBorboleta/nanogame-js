@@ -28,9 +28,51 @@ nanogame.game.__initModule = function(){
     // Init inner classes
     // None
 
+    nanogame.game.card_min = 1
+    nanogame.game.card_max = 10
+    nanogame.game.card_count = 5
+
+    nanogame.game.white_player = 0;
+    nanogame.game.black_player = 1;
+    nanogame.game.count_player = 2;
+
     nanogame.game.game_is_terminated = false;
+    nanogame.game.game_winner = null;
+
+    nanogame.game.active_player = nanogame.game.white_player;
+
+    nanogame.game.cards = [];
+    nanogame.game.cards[nanogame.game.white_player] = nanogame.game.select_random_cards();
+    nanogame.game.cards[nanogame.game.black_player] = nanogame.game.select_random_cards();
+
+    nanogame.debug.writeMessage( "nanogame.game.__initModule(): white cards=" +  nanogame.game.cards[nanogame.game.white_player]);
+    nanogame.debug.writeMessage( "nanogame.game.__initModule(): black cards=" +  nanogame.game.cards[nanogame.game.black_player]);
+
 
     nanogame.debug.writeMessage( "nanogame.game.__initModule(): done" );
 };
 
+nanogame.game.select_random_cards = function(){
+
+    let remaining_cards = [];
+    for ( let card_value=nanogame.game.card_min; card_value <= nanogame.game.card_max ;  card_value++ )  {
+        remaining_cards.push(card_value);
+    }
+
+    let selected_cards = [];
+
+    while ( selected_cards.length < nanogame.game.card_count )  {
+
+        let selected_card_index = Math.floor(Math.random()*remaining_cards.length);
+        let card_value = remaining_cards[selected_card_index];
+        selected_cards.push(card_value);
+
+        remaining_cards = remaining_cards.filter(function(curent_value, current_index){
+            return ( current_index !== selected_card_index ); });
+
+    }
+
+    selected_cards.sort(function(a, b){ return (a - b); });
+    return selected_cards;
+};
 //////////////////////////////////////////////////////////////////////////

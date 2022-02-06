@@ -25,6 +25,7 @@ nanogame.broker.__initModule = function(){
     // Init required modules
     nanogame.debug.__initModule();
     nanogame.presenter.__initModule();
+    nanogame.game.__initModule();
 
     // Init inner classes
     // None
