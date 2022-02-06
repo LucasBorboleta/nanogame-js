@@ -15,12 +15,12 @@ You should have received a copy of the GNU General Public License along with thi
 NANOGAME-JS-COPYRIGHT-MD-END */
 ///////////////////////////////////////////////////////////////////////////////
 nanogame.debug = { };
-nanogame.debug.__initModuleCalled = false;
+nanogame.debug.__init_module_done = false;
 
-nanogame.debug.__initModule = function(){
+nanogame.debug.init_module = function(){
 
-    if ( nanogame.debug.__initModuleCalled ) return;
-    nanogame.debug.__initModuleCalled = true;
+    if ( nanogame.debug.__init_module_done ) return;
+    nanogame.debug.__init_module_done = true;
 
     // Init required modules
     // None
@@ -32,8 +32,10 @@ nanogame.debug.__initModule = function(){
     nanogame.debug.messages = document.getElementById( "nanogame_debug_messages_id" );
 
     nanogame.debug.messageCount = 0;
-    nanogame.debug.is_enabled = false;
+    nanogame.debug.is_enabled = true;
     nanogame.debug.enable(nanogame.debug.is_enabled);
+
+    nanogame.debug.write_message( "nanogame.debug.init_module(): done" );
 };
 
 nanogame.debug.assert = function(condition, message){
@@ -43,11 +45,11 @@ nanogame.debug.assert = function(condition, message){
 
     console.assert(condition, message);
     if ( ! condition ) {
-        nanogame.debug.writeMessage("assertion failed: " + message);
+        nanogame.debug.write_message("assertion failed: " + message);
     }
 };
 
-nanogame.debug.clearMessages = function(){
+nanogame.debug.clear_messages = function(){
     nanogame.debug.messages.innerHTML = "" ;
 };
 
@@ -60,7 +62,7 @@ nanogame.debug.enable = function(condition){
     nanogame.debug.is_enabled = condition;
 
     if ( ! nanogame.debug.is_enabled ) {
-        nanogame.debug.clearMessages();
+        nanogame.debug.clear_messages();
     }
 
     if ( nanogame.debug.is_enabled ) {
@@ -70,7 +72,7 @@ nanogame.debug.enable = function(condition){
     }
 };
 
-nanogame.debug.writeMessage = function(text){
+nanogame.debug.write_message = function(text){
     if ( nanogame.debug.is_enabled ) {
         nanogame.debug.messageCount += 1 ;
 

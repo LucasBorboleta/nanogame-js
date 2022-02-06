@@ -15,53 +15,75 @@ You should have received a copy of the GNU General Public License along with thi
 NANOGAME-JS-COPYRIGHT-MD-END */
 ///////////////////////////////////////////////////////////////////////////////
 nanogame.game = { };
-nanogame.game.__initModuleCalled = false;
+nanogame.game.__init_module_done = false;
 
-nanogame.game.__initModule = function(){
+nanogame.game.init_module = function(){
 
-    if ( nanogame.game.__initModuleCalled ) return;
-    nanogame.game.__initModuleCalled = true;
+    if ( nanogame.game.__init_module_done ) return;
+    nanogame.game.__init_module_done = true;
 
     // Init required modules
-    nanogame.debug.__initModule();
+    nanogame.debug.init_module();
 
     // Init inner classes
     // None
 
-    nanogame.game.card_min = 1
-    nanogame.game.card_max = 10
-    nanogame.game.card_count = 5
-
-    nanogame.game.white_player = 0;
-    nanogame.game.black_player = 1;
-    nanogame.game.count_player = 2;
-
-    nanogame.game.game_is_terminated = false;
-    nanogame.game.game_winner = null;
-
-    nanogame.game.active_player = nanogame.game.white_player;
-
-    nanogame.game.cards = [];
-    nanogame.game.cards[nanogame.game.white_player] = nanogame.game.select_random_cards();
-    nanogame.game.cards[nanogame.game.black_player] = nanogame.game.select_random_cards();
-
-    nanogame.debug.writeMessage( "nanogame.game.__initModule(): white cards=" +  nanogame.game.cards[nanogame.game.white_player]);
-    nanogame.debug.writeMessage( "nanogame.game.__initModule(): black cards=" +  nanogame.game.cards[nanogame.game.black_player]);
-
-
-    nanogame.debug.writeMessage( "nanogame.game.__initModule(): done" );
+    nanogame.debug.write_message( "nanogame.game.init_module(): done" );
 };
 
-nanogame.game.select_random_cards = function(){
+nanogame.game.start = function(){
+
+    nanogame.game.__card_min = 1
+    nanogame.game.__card_max = 10
+    nanogame.game.__card_count = 5
+
+    nanogame.game.__white_player = 0;
+    nanogame.game.__black_player = 1;
+    nanogame.game.__count_player = 2;
+
+    nanogame.game.__is_terminated = false;
+    nanogame.game.__winner = null;
+
+    nanogame.game.__active_player = nanogame.game.__white_player;
+
+    nanogame.game.__cards = [];
+    nanogame.game.__cards[nanogame.game.__white_player] = nanogame.game.__select_random_cards();
+    nanogame.game.__cards[nanogame.game.__black_player] = nanogame.game.__select_random_cards();
+
+    nanogame.debug.write_message( "nanogame.game.start(): white cards=" +  nanogame.game.__cards[nanogame.game.__white_player]);
+    nanogame.debug.write_message( "nanogame.game.start(): black cards=" +  nanogame.game.__cards[nanogame.game.__black_player]);
+};
+
+nanogame.game.is_terminated = function(){
+    return nanogame.game.__is_terminated;
+};
+
+nanogame.game.get_white_player = function(){
+    return nanogame.game.__white_player;
+};
+
+nanogame.game.get_black_player = function(){
+    return nanogame.game.__black_player;
+};
+
+nanogame.game.get_active_player = function(){
+    return nanogame.game.__active_player;
+};
+
+nanogame.game.get_winner = function(){
+    return nanogame.game.__winner;
+};
+
+nanogame.game.__select_random_cards = function(){
 
     let remaining_cards = [];
-    for ( let card_value=nanogame.game.card_min; card_value <= nanogame.game.card_max ;  card_value++ )  {
+    for ( let card_value=nanogame.game.__card_min; card_value <= nanogame.game.__card_max ;  card_value++ )  {
         remaining_cards.push(card_value);
     }
 
     let selected_cards = [];
 
-    while ( selected_cards.length < nanogame.game.card_count )  {
+    while ( selected_cards.length < nanogame.game.__card_count )  {
 
         let selected_card_index = Math.floor(Math.random()*remaining_cards.length);
         let card_value = remaining_cards[selected_card_index];

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="./nanogame.css">
+	<meta charset="UTF-8" >
+	<meta name="viewport" content="width=device-width, initial-scale=1" >
+	<link rel="stylesheet" href="./nanogame.css" >
 	<title>nanogame</title>
 </head>
 
@@ -23,63 +23,62 @@ You should have received a copy of the GNU General Public License along with thi
 
 NANOGAME-JS-COPYRIGHT-MD-END -->
 
-<body onload="nanogame.__initModule(); nanogame.start();">
+<body onload="nanogame.init_module(); nanogame.start();" >
 
-	<p id="nanogame_wait_id">Please wait, nanogame files are being loaded ...</p>
+	<p id="nanogame_wait_id" >Please wait, nanogame files are being loaded ...</p>
 
 
-	<div class="nanogame_div_play_class">
-		<span class="nanogame_label_class">White</span>
+	<div class="nanogame_div_play_class" >
+		<span class="nanogame_label_class" >White</span>
 
-		<span class="nanogame_label_class">play:</span>
+		<span class="nanogame_label_class" >play:</span>
 
-		<select class="nanogame_select_class" id="nanogame_white_selector_id"
-			onchange="nanogame.presenter.white_select()"></select>
+		<select class="nanogame_select_class" id="nanogame_white_selector_id" ></select>
 
 		<button class="nanogame_button_class" type="button" id="nanogame_white_ok_id"
-			onclick="nanogame.presenter.white_confirm()">OK</button>
+			onclick="nanogame.presenter.confirm()" >OK</button>
 
-		<span class="nanogame_label_class">score:</span>
+		<span class="nanogame_label_class" >score:</span>
 
-		<span class="nanogame_score_class" id="nanogame_white_score_id"></span>
+		<span class="nanogame_score_class" id="nanogame_white_score_id" ></span>
 	</div>
 
 
-	<div class="nanogame_div_play_class">
-		<span class="nanogame_label_class">Black</span>
+	<div class="nanogame_div_play_class" >
+		<span class="nanogame_label_class" >Black</span>
 
-		<span class="nanogame_label_class">play:</span>
+		<span class="nanogame_label_class" >play:</span>
 
-		<select class="nanogame_select_class" id="nanogame_black_selector_id"
-			onchange="nanogame.presenter.black_select()"></select>
+		<select class="nanogame_select_class" id="nanogame_black_selector_id" ></select>
 
 		<button class="nanogame_button_class" type="button" id="nanogame_black_ok_id"
-			onclick="nanogame.presenter.black_confirm()">OK</button>
+			onclick="nanogame.presenter.confirm()" >OK</button>
 
-		<span class="nanogame_label_class">score:</span>
+		<span class="nanogame_label_class" >score:</span>
 
-		<span class="nanogame_score_class" id="nanogame_black_score_id"></span>
+		<span class="nanogame_score_class" id="nanogame_black_score_id" ></span>
 	</div>
 
-	<div class="nanogame_div_play_class">
-		<p class="nanogame_messages_class" id="nanogame_game_status_id">game status</p>
+	<div class="nanogame_div_play_class" >
+		<p class="nanogame_messages_class" id="nanogame_game_status_id" >game status</p>
 	</div>
 
 
-	<div class="nanogame_div_debug_class" id="nanogame_debug_div_id">
+	<div class="nanogame_div_debug_class" id="nanogame_debug_div_id" >
 
 		<span>debug</span>
 
-		<button class="nanogame_button_class" type="button" id="nanogame_debug_clear_id" onclick="nanogame.debug.clearMessages()">Clear</button>
+		<button class="nanogame_button_class" type="button" id="nanogame_debug_clear_id"
+			onclick="nanogame.debug.clear_messages()" >Clear</button>
 
-		<p class="nanogame_messages_class" id="nanogame_debug_messages_id"></p>
+		<p class="nanogame_messages_class" id="nanogame_debug_messages_id" ></p>
 	</div>
 
-	<script src="./nanogame.js"></script>
-	<script src="./nanogame_broker.js"></script>
-	<script src="./nanogame_debug.js"></script>
-	<script src="./nanogame_game.js"></script>
-	<script src="./nanogame_presenter.js"></script>
+	<script src="./nanogame.js" ></script>
+	<script src="./nanogame_broker.js" ></script>
+	<script src="./nanogame_debug.js" ></script>
+	<script src="./nanogame_game.js" ></script>
+	<script src="./nanogame_presenter.js" ></script>
 
 </body>
 

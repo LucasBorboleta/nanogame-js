@@ -15,17 +15,17 @@ You should have received a copy of the GNU General Public License along with thi
 NANOGAME-JS-COPYRIGHT-MD-END */
 ///////////////////////////////////////////////////////////////////////////////
 const nanogame = { };
-nanogame.__initModuleCalled = false;
+nanogame.__init_module_done = false;
 
-nanogame.__initModule = function(){
+nanogame.init_module = function(){
 
-    if ( nanogame.__initModuleCalled ) return;
-    nanogame.__initModuleCalled = true;
+    if ( nanogame.__init_module_done ) return;
+    nanogame.__init_module_done = true;
 
     // Init required packages
-    nanogame.debug.__initModule();
-    nanogame.debug.enable (true);
-    nanogame.broker.__initModule();
+    nanogame.debug.init_module();
+    nanogame.debug.enable(true);
+    nanogame.broker.init_module();
 
     // Init inner classes
     // None
@@ -35,11 +35,11 @@ nanogame.__initModule = function(){
         document.getElementById( "nanogame_wait_id" ).style.display = "none";
     }
 
-    nanogame.debug.writeMessage( "nanogame.__initModule(): done" );
+    nanogame.debug.write_message( "nanogame.init_module(): done" );
 };
 
 nanogame.start = function(){
     nanogame.broker.start();
-    nanogame.debug.writeMessage( "nanogame.start(): done" );
+    nanogame.debug.write_message( "nanogame.start(): done" );
 };
 ///////////////////////////////////////////////////////////////////////////////

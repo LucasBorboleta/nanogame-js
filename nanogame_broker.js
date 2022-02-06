@@ -15,25 +15,35 @@ You should have received a copy of the GNU General Public License along with thi
 NANOGAME-JS-COPYRIGHT-MD-END */
 ///////////////////////////////////////////////////////////////////////////////
 nanogame.broker = { };
-nanogame.broker.__initModuleCalled = false;
+nanogame.broker.__init_module_done = false;
 
-nanogame.broker.__initModule = function(){
+nanogame.broker.init_module = function(){
 
-    if ( nanogame.broker.__initModuleCalled ) return;
-    nanogame.broker.__initModuleCalled = true;
+    if ( nanogame.broker.__init_module_done ) return;
+    nanogame.broker.__init_module_done = true;
 
     // Init required modules
-    nanogame.debug.__initModule();
-    nanogame.presenter.__initModule();
-    nanogame.game.__initModule();
+    nanogame.debug.init_module();
+    nanogame.game.init_module();
+    nanogame.presenter.init_module();
 
     // Init inner classes
     // None
 
-    nanogame.debug.writeMessage( "nanogame.broker.__initModule(): done" );
+    nanogame.debug.write_message( "nanogame.broker.init_module(): done" );
 };
 
 nanogame.broker.start = function(){
-    nanogame.debug.writeMessage( "nanogame.broker.start(): done" );
+    nanogame.game.start();
+    nanogame.presenter.start();
+
+    nanogame.presenter.set_observer(nanogame.broker);
+
+    nanogame.debug.write_message( "nanogame.broker.start(): done" );
 };
+
+nanogame.broker.update_from_observable = function(observable){
+    nanogame.debug.write_message( "nanogame.broker.update_from_observable(): ..." );
+};
+
 /////////////////////////////////////////////////////////////////////////
