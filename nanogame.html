@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="./nanogame.css">
+	<title>nanogame</title>
+</head>
+
+<!-- NANOGAME-JS-COPYRIGHT-MD-BEGIN
+# COPYRIGHT
+
+The software NANOGAME-JS implements the rules of the NANOGAME board game. This copyright notice only covers the software NANOGAME-JS. The copyright of the NANOGAME rules and board game concept can be found at https://github.com/LucasBorboleta/nanogame.
+
+Copyright (C) 2022 Lucas Borboleta (lucas.borboleta@free.fr).
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses>.
+
+NANOGAME-JS-COPYRIGHT-MD-END -->
+
+<body onload="nanogame.__initModule(); nanogame.start();">
+
+	<p id="nanogame_wait_id">Please wait, nanogame files are being loaded ...</p>
+
+
+	<div class="nanogame_div_play_class">
+		<span class="nanogame_label_class">White</span>
+
+		<span class="nanogame_label_class">play:</span>
+
+		<select class="nanogame_select_class" id="nanogame_white_selector_id"
+			onchange="nanogame.presenter.white_select()"></select>
+
+		<button class="nanogame_button_class" type="button" id="nanogame_white_ok_id"
+			onclick="nanogame.presenter.white_confirm()">OK</button>
+
+		<span class="nanogame_label_class">score:</span>
+
+		<span class="nanogame_score_class" id="nanogame_white_score_id"></span>
+	</div>
+
+
+	<div class="nanogame_div_play_class">
+		<span class="nanogame_label_class">Black</span>
+
+		<span class="nanogame_label_class">play:</span>
+
+		<select class="nanogame_select_class" id="nanogame_black_selector_id"
+			onchange="nanogame.presenter.black_select()"></select>
+
+		<button class="nanogame_button_class" type="button" id="nanogame_black_ok_id"
+			onclick="nanogame.presenter.black_confirm()">OK</button>
+
+		<span class="nanogame_label_class">score:</span>
+
+		<span class="nanogame_score_class" id="nanogame_black_score_id"></span>
+	</div>
+
+	<div class="nanogame_div_play_class">
+		<p class="nanogame_messages_class" id="nanogame_game_status_id">game status</p>
+	</div>
+
+
+	<div class="nanogame_div_debug_class" id="nanogame_debug_div_id">
+
+		<span>debug</span>
+
+		<button class="nanogame_button_class" type="button" id="nanogame_debug_clear_id" onclick="nanogame.debug.clearMessages()">Clear</button>
+
+		<p class="nanogame_messages_class" id="nanogame_debug_messages_id"></p>
+	</div>
+
+	<script src="./nanogame.js"></script>
+	<script src="./nanogame_broker.js"></script>
+	<script src="./nanogame_debug.js"></script>
+	<script src="./nanogame_game.js"></script>
+	<script src="./nanogame_presenter.js"></script>
+
+</body>
+
+</html>
