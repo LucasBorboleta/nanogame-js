@@ -24,6 +24,7 @@ nanogame.broker.init_module = function(){
 
     // Init required modules
     nanogame.debug.init_module();
+    nanogame.defs.init_module();
     nanogame.game.init_module();
     nanogame.presenter.init_module();
 
@@ -33,16 +34,38 @@ nanogame.broker.init_module = function(){
     nanogame.debug.write_message( "nanogame.broker.init_module(): done" );
 };
 
+nanogame.broker.next_turn = function(){
+
+    if ( ! nanogame.game.is_terminated() ) {
+
+        nanogame.presenter.set_score(nanogame.defs.white_player, nanogame.game.get_score(nanogame.defs.white_player));
+        nanogame.presenter.set_score(nanogame.defs.black_player, nanogame.game.get_score(nanogame.defs.black_player));
+
+        const white_cards = nanogame.game.get_cards(nanogame.defs.white_player);
+        const black_cards = nanogame.game.get_cards(nanogame.defs.black_player);
+
+        nanogame.presenter.set_selector_options(nanogame.defs.white_player, white_cards);
+        nanogame.presenter.set_selector_options(nanogame.defs.black_player, black_cards);
+
+        nanogame.presenter.set_selector_selection(nanogame.defs.white_player, white_cards[0]);
+        nanogame.presenter.set_selector_selection(nanogame.defs.black_player, black_cards[0]);
+    }
+};
+
 nanogame.broker.start = function(){
     nanogame.game.start();
-    nanogame.presenter.start();
 
+    nanogame.presenter.start();
     nanogame.presenter.set_observer(nanogame.broker);
+
+    nanogame.broker.next_turn();
 
     nanogame.debug.write_message( "nanogame.broker.start(): done" );
 };
 
 nanogame.broker.update_from_observable = function(observable){
+    const card = nanogame.presenter.get_selector_selection(nanogame.game.get_active_player());
+    nanogame.game.set_play(card);
     nanogame.debug.write_message( "nanogame.broker.update_from_observable(): ..." );
 };
 

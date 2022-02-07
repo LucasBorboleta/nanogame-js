@@ -24,6 +24,7 @@ nanogame.presenter.init_module = function(){
 
     // Init required modules
     nanogame.debug.init_module();
+    nanogame.defs.init_module();
 
     // Init inner classes
     // None
@@ -35,63 +36,72 @@ nanogame.presenter.start = function(){
 
     nanogame.presenter.__observer = null;
 
-    nanogame.presenter.__white_selector = document.getElementById( "nanogame_white_selector_id" );
-    nanogame.presenter.__black_selector = document.getElementById( "nanogame_black_selector_id" );
+    nanogame.presenter.__selector = []
+    nanogame.presenter.__selector[nanogame.defs.white_player] = document.getElementById( "nanogame_white_selector_id" );
+    nanogame.presenter.__selector [nanogame.defs.black_player] = document.getElementById( "nanogame_black_selector_id" );
 
-    nanogame.presenter.__white_ok = document.getElementById( "nanogame_white_ok_id" );
-    nanogame.presenter.__black_ok = document.getElementById( "nanogame_black_ok_id" );
+    nanogame.presenter.__committer = []
+    nanogame.presenter.__committer[nanogame.defs.white_player] = document.getElementById( "nanogame_white_ok_id" );
+    nanogame.presenter.__committer[nanogame.defs.black_player] = document.getElementById( "nanogame_black_ok_id" );
 
-    nanogame.presenter.__white_score = document.getElementById( "nanogame_white_score_id" );
-    nanogame.presenter.__black_score = document.getElementById( "nanogame_black_score_id" );
+    nanogame.presenter.__score = []
+    nanogame.presenter.__score[nanogame.defs.white_player] = document.getElementById( "nanogame_white_score_id" );
+    nanogame.presenter.__score[nanogame.defs.black_player] = document.getElementById( "nanogame_black_score_id" );
 
-    nanogame.presenter.__enable_element(nanogame.presenter.__white_selector, true);
-    nanogame.presenter.__enable_element(nanogame.presenter.__black_selector, true);
+    nanogame.presenter.enable_selector(nanogame.defs.white_player, true);
+    nanogame.presenter.enable_selector(nanogame.defs.black_player, true);
 
-    nanogame.presenter.__enable_element(nanogame.presenter.__white_ok, true);
-    nanogame.presenter.__enable_element(nanogame.presenter.__black_ok, true);
-
-    nanogame.presenter.__set_selector_options(nanogame.presenter.__white_selector, [0, 1, 2] );
-    nanogame.presenter.__set_selector_options(nanogame.presenter.__black_selector, [3, 4, 5] );
-
-    nanogame.presenter.__set_selector_selection(nanogame.presenter.__white_selector, 1 );
-    nanogame.presenter.__set_selector_selection(nanogame.presenter.__black_selector, 4 );
-
-    nanogame.presenter.__set_score(nanogame.presenter.__white_score, 3);
-    nanogame.presenter.__set_score(nanogame.presenter.__black_score, 6);
+    nanogame.presenter.enable_committer(nanogame.defs.white_player, true);
+    nanogame.presenter.enable_committer(nanogame.defs.black_player, true);
 
     nanogame.debug.write_message( "nanogame.presenter.start(): done" );
 };
 
-nanogame.presenter.__enable_element = function(element, condition){
-    element.disabled = ( ! condition );
+nanogame.presenter.commit = function(){
+    nanogame.debug.write_message( "nanogame.presenter.commit: ..." );
+    nanogame.presenter.__notify_observer();
 };
 
-nanogame.presenter.__get_selector_selection = function(element){
+nanogame.presenter.enable_committer = function(player, condition){
+    const element = nanogame.presenter.__committer[player];
+    nanogame.presenter.__enable_element(element, condition);
+};
+
+nanogame.presenter.enable_selector = function(player, condition){
+    const element = nanogame.presenter.__selector[player];
+    nanogame.presenter.__enable_element(element, condition);
+};
+
+nanogame.presenter.set_observer = function(observer){
+    nanogame.presenter.__observer = observer;
+};
+
+nanogame.presenter.get_selector_selection = function(player){
+    const element = nanogame.presenter.__selector[player];
     const selection = element.value ;
     return selection;
 };
 
-nanogame.presenter.__set_selector_selection = function(element, selection){
-    element.value = selection;
-};
-
-nanogame.presenter.__set_selector_options = function(element, options){
+nanogame.presenter.set_selector_options = function(player, options){
+    const element = nanogame.presenter.__selector[player];
+    element.innerHTML = "" ;
     for ( const option of options ) {
         element.innerHTML += "<option value=" + "\"" +  option + "\"" + ">" + option + "</option>" ;
     }
 };
 
-nanogame.presenter.__set_score = function(element, score){
+nanogame.presenter.set_selector_selection = function(player, selection){
+    const element = nanogame.presenter.__selector[player];
+    element.value = selection;
+};
+
+nanogame.presenter.set_score = function(player, score){
+    const element = nanogame.presenter.__score[player];
     element.innerHTML = "" + score;
 };
 
-nanogame.presenter.confirm = function(){
-    nanogame.debug.write_message( "nanogame.presenter.confirm: ..." );
-    nanogame.presenter.__notify_observer();
-};
-
-nanogame.presenter.set_observer = function(observer){
-    nanogame.presenter.__observer = observer;
+nanogame.presenter.__enable_element = function(element, condition){
+    element.disabled = ( ! condition );
 };
 
 nanogame.presenter.__notify_observer = function(){

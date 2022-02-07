@@ -24,6 +24,7 @@ nanogame.game.init_module = function(){
 
     // Init required modules
     nanogame.debug.init_module();
+    nanogame.defs.init_module();
 
     // Init inner classes
     // None
@@ -33,57 +34,65 @@ nanogame.game.init_module = function(){
 
 nanogame.game.start = function(){
 
-    nanogame.game.__card_min = 1
-    nanogame.game.__card_max = 10
-    nanogame.game.__card_count = 5
-
-    nanogame.game.__white_player = 0;
-    nanogame.game.__black_player = 1;
-    nanogame.game.__count_player = 2;
-
     nanogame.game.__is_terminated = false;
     nanogame.game.__winner = null;
+    nanogame.game.__active_player = nanogame.defs.white_player;
 
-    nanogame.game.__active_player = nanogame.game.__white_player;
+    nanogame.game.__score = [];
+    nanogame.game.__score[nanogame.defs.white_player] = 0;
+    nanogame.game.__score[nanogame.defs.black_player] = 0;
 
     nanogame.game.__cards = [];
-    nanogame.game.__cards[nanogame.game.__white_player] = nanogame.game.__select_random_cards();
-    nanogame.game.__cards[nanogame.game.__black_player] = nanogame.game.__select_random_cards();
+    nanogame.game.__cards[nanogame.defs.white_player] = nanogame.game.__select_random_cards();
+    nanogame.game.__cards[nanogame.defs.black_player] = nanogame.game.__select_random_cards();
 
-    nanogame.debug.write_message( "nanogame.game.start(): white cards=" +  nanogame.game.__cards[nanogame.game.__white_player]);
-    nanogame.debug.write_message( "nanogame.game.start(): black cards=" +  nanogame.game.__cards[nanogame.game.__black_player]);
-};
+    nanogame.game.__play = [];
+    nanogame.game.__play[nanogame.defs.white_player] = null;
+    nanogame.game.__play[nanogame.defs.black_player] = null;
 
-nanogame.game.is_terminated = function(){
-    return nanogame.game.__is_terminated;
-};
-
-nanogame.game.get_white_player = function(){
-    return nanogame.game.__white_player;
-};
-
-nanogame.game.get_black_player = function(){
-    return nanogame.game.__black_player;
+    nanogame.debug.write_message( "nanogame.game.start(): white cards=" +  nanogame.game.__cards[nanogame.defs.white_player]);
+    nanogame.debug.write_message( "nanogame.game.start(): black cards=" +  nanogame.game.__cards[nanogame.defs.black_player]);
 };
 
 nanogame.game.get_active_player = function(){
     return nanogame.game.__active_player;
 };
 
+nanogame.game.get_cards = function(player){
+    return nanogame.game.__cards[player];
+};
+
+nanogame.game.get_score = function(player){
+    return nanogame.game.__score[player];
+};
+
 nanogame.game.get_winner = function(){
     return nanogame.game.__winner;
+};
+
+nanogame.game.is_terminated = function(){
+    return nanogame.game.__is_terminated;
+};
+
+nanogame.game.set_play = function(card){
+    nanogame.debug.assert( !  nanogame.game.__is_terminated);
+    nanogame.game.__play[nanogame.game.__active_player] = card;
+
+    if ( nanogame.game.__active_player === nanogame.defs.black_player ) {
+
+    }
 };
 
 nanogame.game.__select_random_cards = function(){
 
     let remaining_cards = [];
-    for ( let card_value=nanogame.game.__card_min; card_value <= nanogame.game.__card_max ;  card_value++ )  {
+    for ( let card_value=nanogame.defs.card_min; card_value <= nanogame.defs.card_max ;  card_value++ )  {
         remaining_cards.push(card_value);
     }
 
     let selected_cards = [];
 
-    while ( selected_cards.length < nanogame.game.__card_count )  {
+    while ( selected_cards.length < nanogame.defs.card_count )  {
 
         let selected_card_index = Math.floor(Math.random()*remaining_cards.length);
         let card_value = remaining_cards[selected_card_index];
