@@ -34,39 +34,90 @@ nanogame.broker.init_module = function(){
     nanogame.debug.write_message( "nanogame.broker.init_module(): done" );
 };
 
-nanogame.broker.next_turn = function(){
-
-    if ( ! nanogame.game.is_terminated() ) {
-
-        nanogame.presenter.set_score(nanogame.defs.white_player, nanogame.game.get_score(nanogame.defs.white_player));
-        nanogame.presenter.set_score(nanogame.defs.black_player, nanogame.game.get_score(nanogame.defs.black_player));
-
-        const white_cards = nanogame.game.get_cards(nanogame.defs.white_player);
-        const black_cards = nanogame.game.get_cards(nanogame.defs.black_player);
-
-        nanogame.presenter.set_selector_options(nanogame.defs.white_player, white_cards);
-        nanogame.presenter.set_selector_options(nanogame.defs.black_player, black_cards);
-
-        nanogame.presenter.set_selector_selection(nanogame.defs.white_player, white_cards[0]);
-        nanogame.presenter.set_selector_selection(nanogame.defs.black_player, black_cards[0]);
-    }
-};
-
 nanogame.broker.start = function(){
     nanogame.game.start();
 
     nanogame.presenter.start();
     nanogame.presenter.set_observer(nanogame.broker);
-
-    nanogame.broker.next_turn();
+    nanogame.broker.update_presenter();
 
     nanogame.debug.write_message( "nanogame.broker.start(): done" );
 };
 
 nanogame.broker.update_from_observable = function(observable){
+
+    nanogame.presenter.enable_committer(nanogame.defs.white_player, false);
+    nanogame.presenter.enable_committer(nanogame.defs.black_player, false);
+
+    nanogame.presenter.enable_selector(nanogame.defs.white_player, false);
+    nanogame.presenter.enable_selector(nanogame.defs.black_player, false);
+
     const card = nanogame.presenter.get_selector_selection(nanogame.game.get_active_player());
     nanogame.game.set_play(card);
-    nanogame.debug.write_message( "nanogame.broker.update_from_observable(): ..." );
+    nanogame.game.update();
+    nanogame.broker.update_presenter();
 };
 
+nanogame.broker.update_presenter = function(){
+
+    nanogame.presenter.enable_committer(nanogame.defs.white_player, false);
+    nanogame.presenter.enable_committer(nanogame.defs.black_player, false);
+
+    nanogame.presenter.enable_selector(nanogame.defs.white_player, false);
+    nanogame.presenter.enable_selector(nanogame.defs.black_player, false);
+
+    nanogame.presenter.set_score(nanogame.defs.white_player, nanogame.game.get_score(nanogame.defs.white_player));
+    nanogame.presenter.set_score(nanogame.defs.black_player, nanogame.game.get_score(nanogame.defs.black_player));
+
+    const white_cards = nanogame.game.get_cards(nanogame.defs.white_player);
+    const black_cards = nanogame.game.get_cards(nanogame.defs.black_player);
+
+    nanogame.presenter.set_selector_options(nanogame.defs.white_player, white_cards);
+    nanogame.presenter.set_selector_options(nanogame.defs.black_player, black_cards);
+
+    const white_play = nanogame.game.get_play(nanogame.defs.white_player);
+    const black_play = nanogame.game.get_play(nanogame.defs.black_player);
+
+    nanogame.presenter.set_play(nanogame.defs.white_player, "?");
+    nanogame.presenter.set_play(nanogame.defs.black_player, "?");
+
+    if ( white_play !== null ) {
+        nanogame.presenter.set_play(nanogame.defs.white_player, white_play);
+
+    } else if (white_cards.length !== 0) {
+        nanogame.presenter.set_selector_selection(nanogame.defs.white_player, white_cards[0]);
+    }
+
+    if ( black_play !== null ) {
+        nanogame.presenter.set_play(nanogame.defs.black_player, black_play);
+
+    } else if (black_cards.length !== 0) {
+        nanogame.presenter.set_selector_selection(nanogame.defs.black_player, black_cards[0]);
+    }
+
+    if ( nanogame.game.is_terminated() ) {
+
+        if ( nanogame.game.get_winner() === nanogame.defs.white_player )  {
+            nanogame.presenter.set_status("White wins !");
+
+        } else if ( nanogame.game.get_winner() === nanogame.defs.black_player ) {
+            nanogame.presenter.set_status("Black wins !");
+
+        } else {
+            nanogame.presenter.set_status("Nobody wins !");
+        }
+
+    } else {
+
+        nanogame.presenter.enable_committer(nanogame.game.get_active_player(), true);
+        nanogame.presenter.enable_selector(nanogame.game.get_active_player(), true);
+
+        if ( nanogame.game.get_active_player() === nanogame.defs.white_player ) {
+            nanogame.presenter.set_status("White turn ...");
+
+        } else if ( nanogame.game.get_active_player() === nanogame.defs.black_player ) {
+            nanogame.presenter.set_status("Black turn ...");
+        }
+    }
+};
 /////////////////////////////////////////////////////////////////////////

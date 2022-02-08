@@ -32,7 +32,7 @@ nanogame.debug.init_module = function(){
     nanogame.debug.messages = document.getElementById( "nanogame_debug_messages_id" );
 
     nanogame.debug.messageCount = 0;
-    nanogame.debug.is_enabled = true;
+    nanogame.debug.is_enabled = false;
     nanogame.debug.enable(nanogame.debug.is_enabled);
 
     nanogame.debug.write_message( "nanogame.debug.init_module(): done" );
@@ -53,7 +53,7 @@ nanogame.debug.clear_messages = function(){
     nanogame.debug.messages.innerHTML = "" ;
 };
 
-nanogame.debug.debug = function(){
+nanogame.debug.toggle = function(){
     nanogame.debug.is_enabled = ! nanogame.debug.is_enabled;
     nanogame.debug.enable(nanogame.debug.is_enabled);
 };

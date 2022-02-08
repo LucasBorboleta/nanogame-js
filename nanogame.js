@@ -24,7 +24,7 @@ nanogame.init_module = function(){
 
     // Init required packages
     nanogame.debug.init_module();
-    nanogame.debug.enable(true);
+    nanogame.debug.enable(false);
     nanogame.broker.init_module();
 
     // Init inner classes
