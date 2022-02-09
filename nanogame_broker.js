@@ -69,30 +69,52 @@ nanogame.broker.update_presenter = function(){
     nanogame.presenter.set_score(nanogame.defs.white_player, nanogame.game.get_score(nanogame.defs.white_player));
     nanogame.presenter.set_score(nanogame.defs.black_player, nanogame.game.get_score(nanogame.defs.black_player));
 
-    const white_cards = nanogame.game.get_cards(nanogame.defs.white_player);
-    const black_cards = nanogame.game.get_cards(nanogame.defs.black_player);
+    {
+        const white_play = nanogame.game.get_play(nanogame.defs.white_player);
 
-    nanogame.presenter.set_selector_options(nanogame.defs.white_player, white_cards);
-    nanogame.presenter.set_selector_options(nanogame.defs.black_player, black_cards);
-
-    const white_play = nanogame.game.get_play(nanogame.defs.white_player);
-    const black_play = nanogame.game.get_play(nanogame.defs.black_player);
-
-    nanogame.presenter.set_play(nanogame.defs.white_player, "?");
-    nanogame.presenter.set_play(nanogame.defs.black_player, "?");
-
-    if ( white_play !== null ) {
-        nanogame.presenter.set_play(nanogame.defs.white_player, white_play);
-
-    } else if (white_cards.length !== 0) {
-        nanogame.presenter.set_selector_selection(nanogame.defs.white_player, white_cards[0]);
+        if ( white_play == null )  {
+            nanogame.presenter.set_play(nanogame.defs.white_player, "?");
+        } else {
+            nanogame.presenter.set_play(nanogame.defs.white_player, white_play);
+        }
     }
 
-    if ( black_play !== null ) {
-        nanogame.presenter.set_play(nanogame.defs.black_player, black_play);
+    {
+        const black_play = nanogame.game.get_play(nanogame.defs.black_player);
 
-    } else if (black_cards.length !== 0) {
-        nanogame.presenter.set_selector_selection(nanogame.defs.black_player, black_cards[0]);
+        if ( black_play == null )  {
+            nanogame.presenter.set_play(nanogame.defs.black_player, "?");
+        } else {
+            nanogame.presenter.set_play(nanogame.defs.black_player, black_play);
+        }
+    }
+
+    {
+        const white_cards = nanogame.game.get_cards(nanogame.defs.white_player);
+
+        if ( nanogame.defs.white_player === nanogame.game.get_active_player() ) {
+            nanogame.presenter.set_selector_options(nanogame.defs.white_player, white_cards);
+            if ( white_cards.length !== 0 ) {
+                nanogame.presenter.set_selector_selection(nanogame.defs.white_player, white_cards[0]);
+            }
+        } else {
+            nanogame.presenter.set_selector_options(nanogame.defs.white_player, []);
+            nanogame.presenter.set_selector_selection(nanogame.defs.white_player,"");
+        }
+    }
+
+    {
+        const black_cards = nanogame.game.get_cards(nanogame.defs.black_player);
+
+        if ( nanogame.defs.black_player === nanogame.game.get_active_player() ) {
+            nanogame.presenter.set_selector_options(nanogame.defs.black_player, black_cards);
+            if ( black_cards.length !== 0 ) {
+                nanogame.presenter.set_selector_selection(nanogame.defs.black_player, black_cards[0]);
+            }
+        } else {
+            nanogame.presenter.set_selector_options(nanogame.defs.black_player, []);
+            nanogame.presenter.set_selector_selection(nanogame.defs.black_player,"");
+        }
     }
 
     if ( nanogame.game.is_terminated() ) {
