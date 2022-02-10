@@ -34,6 +34,15 @@ nanogame.broker.init_module = function(){
     nanogame.debug.write_message( "nanogame.broker.init_module(): done" );
 };
 
+nanogame.broker.disable_interaction = function(){
+
+    nanogame.presenter.enable_committer(nanogame.defs.white_player, false);
+    nanogame.presenter.enable_committer(nanogame.defs.black_player, false);
+
+    nanogame.presenter.enable_selector(nanogame.defs.white_player, false);
+    nanogame.presenter.enable_selector(nanogame.defs.black_player, false);
+};
+
 nanogame.broker.start = function(){
     nanogame.game.start();
 
@@ -46,25 +55,28 @@ nanogame.broker.start = function(){
 
 nanogame.broker.update_from_observable = function(observable){
 
-    nanogame.presenter.enable_committer(nanogame.defs.white_player, false);
-    nanogame.presenter.enable_committer(nanogame.defs.black_player, false);
-
-    nanogame.presenter.enable_selector(nanogame.defs.white_player, false);
-    nanogame.presenter.enable_selector(nanogame.defs.black_player, false);
+    nanogame.broker.disable_interaction();
 
     const card = nanogame.presenter.get_selector_selection(nanogame.game.get_active_player());
     nanogame.game.set_play(card);
-    nanogame.game.update();
     nanogame.broker.update_presenter();
+    nanogame.broker.disable_interaction();
+
+    // A delay is required to display black play.
+    // So let's have a delay after each play, either white or black.
+    const broker_delay = 1000;
+    let broker_timeout = null;
+
+    broker_timeout = setTimeout( function(){
+        clearTimeout(broker_timeout);
+        nanogame.game.update();
+        nanogame.broker.update_presenter();
+        }, broker_delay);
 };
 
 nanogame.broker.update_presenter = function(){
 
-    nanogame.presenter.enable_committer(nanogame.defs.white_player, false);
-    nanogame.presenter.enable_committer(nanogame.defs.black_player, false);
-
-    nanogame.presenter.enable_selector(nanogame.defs.white_player, false);
-    nanogame.presenter.enable_selector(nanogame.defs.black_player, false);
+    nanogame.broker.disable_interaction();
 
     nanogame.presenter.set_score(nanogame.defs.white_player, nanogame.game.get_score(nanogame.defs.white_player));
     nanogame.presenter.set_score(nanogame.defs.black_player, nanogame.game.get_score(nanogame.defs.black_player));
