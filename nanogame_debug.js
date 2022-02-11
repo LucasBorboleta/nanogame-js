@@ -28,12 +28,12 @@ nanogame.debug.init_module = function(){
     // Init inner classes
     // None
 
-    nanogame.debug.zone = document.getElementById( "nanogame_debug_div_id" );
-    nanogame.debug.messages = document.getElementById( "nanogame_debug_messages_id" );
+    nanogame.debug.__zone = document.getElementById( "nanogame_debug_div_id" );
+    nanogame.debug.__messages = document.getElementById( "nanogame_debug_messages_id" );
 
-    nanogame.debug.messageCount = 0;
-    nanogame.debug.is_enabled = false;
-    nanogame.debug.enable(nanogame.debug.is_enabled);
+    nanogame.debug.__message_count = 0;
+    nanogame.debug.__is_enabled = false;
+    nanogame.debug.enable(nanogame.debug.__is_enabled);
 
     nanogame.debug.write_message( "nanogame.debug.init_module(): done" );
 };
@@ -50,34 +50,34 @@ nanogame.debug.assert = function(condition, message){
 };
 
 nanogame.debug.clear_messages = function(){
-    nanogame.debug.messages.innerHTML = "" ;
+    nanogame.debug.__messages.innerHTML = "" ;
 };
 
 nanogame.debug.toggle = function(){
-    nanogame.debug.is_enabled = ! nanogame.debug.is_enabled;
-    nanogame.debug.enable(nanogame.debug.is_enabled);
+    nanogame.debug.__is_enabled = ! nanogame.debug.__is_enabled;
+    nanogame.debug.enable(nanogame.debug.__is_enabled);
 };
 
 nanogame.debug.enable = function(condition){
-    nanogame.debug.is_enabled = condition;
+    nanogame.debug.__is_enabled = condition;
 
-    if ( ! nanogame.debug.is_enabled ) {
+    if ( ! nanogame.debug.__is_enabled ) {
         nanogame.debug.clear_messages();
     }
 
-    if ( nanogame.debug.is_enabled ) {
-        nanogame.debug.zone.style.display = "inherit";
+    if ( nanogame.debug.__is_enabled ) {
+        nanogame.debug.__zone.style.display = "inherit";
     } else {
-        nanogame.debug.zone.style.display = "none";
+        nanogame.debug.__zone.style.display = "none";
     }
 };
 
 nanogame.debug.write_message = function(text){
-    if ( nanogame.debug.is_enabled ) {
-        nanogame.debug.messageCount += 1 ;
+    if ( nanogame.debug.__is_enabled ) {
+        nanogame.debug.__message_count += 1 ;
 
-        nanogame.debug.messages.innerHTML = nanogame.debug.messageCount + ":" +
-                                              text + "<br/>" + nanogame.debug.messages.innerHTML;
+        nanogame.debug.__messages.innerHTML = nanogame.debug.__message_count + ":" +
+                                              text + "<br/>" + nanogame.debug.__messages.innerHTML;
     }
 };
 ///////////////////////////////////////////////////////////////////////////////

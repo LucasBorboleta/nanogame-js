@@ -101,7 +101,7 @@ nanogame.game.update = function(){
                 if ( white_card > black_card ) {
                     nanogame.game.__score[nanogame.defs.white_player]++;
 
-                } else if ( black_card > white_card) {
+                } else if ( black_card > white_card ) {
                     nanogame.game.__score[nanogame.defs.black_player]++;
                 }
 

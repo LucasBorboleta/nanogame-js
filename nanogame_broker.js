@@ -111,7 +111,7 @@ nanogame.broker.update_presenter = function(){
             }
         } else {
             nanogame.presenter.set_selector_options(nanogame.defs.white_player, []);
-            nanogame.presenter.set_selector_selection(nanogame.defs.white_player,"");
+            nanogame.presenter.set_selector_selection(nanogame.defs.white_player, "");
         }
     }
 
@@ -125,7 +125,7 @@ nanogame.broker.update_presenter = function(){
             }
         } else {
             nanogame.presenter.set_selector_options(nanogame.defs.black_player, []);
-            nanogame.presenter.set_selector_selection(nanogame.defs.black_player,"");
+            nanogame.presenter.set_selector_selection(nanogame.defs.black_player, "" );
         }
     }
 
