@@ -28,48 +28,41 @@ NANOGAME-JS-COPYRIGHT-MD-END -->
 	<p id="nanogame_wait_id" >Please wait, nanogame files are being loaded ...</p>
 
 
-	<div class="nanogame_div_play_class" >
-		<span class="nanogame_label_class" >White</span>
-		<span class="nanogame_label_class" >cards:</span>
+	<div>
 
-		<select class="nanogame_select_class" id="nanogame_white_selector_id" ></select>
-		<button class="nanogame_button_class" type="button" id="nanogame_white_ok_id"
-			onclick="nanogame.presenter.commit()" >OK</button>
+		<div>
+			<span class="nanogame_label_class" >White</span>
+			<span class="nanogame_label_class" >Black</span>
+		</div>
 
-		<span class="nanogame_label_class" >play:</span>
-		<span class="nanogame_score_class" id="nanogame_white_play_id" ></span>
+		<div>
+			<span class="nanogame_score_class" id="nanogame_white_score_id" ></span>
+			<span class="nanogame_score_class" id="nanogame_black_score_id" ></span>
+		</div>
 
-		<span class="nanogame_label_class" >score:</span>
-		<span class="nanogame_score_class" id="nanogame_white_score_id" ></span>
+		<div>
+			<button class="nanogame_button_class" type="button" id="nanogame_white_ok_id" onclick="nanogame.presenter.commit()" >OK</button>
+			<select class="nanogame_select_class" id="nanogame_white_selector_id" ></select>
+
+			<span class="nanogame_score_class" id="nanogame_white_play_id" ></span>
+			<span class="nanogame_score_class" id="nanogame_black_play_id" ></span>
+
+			<select class="nanogame_select_class" id="nanogame_black_selector_id" ></select>
+			<button class="nanogame_button_class" type="button" id="nanogame_black_ok_id" onclick="nanogame.presenter.commit()" >OK</button>
+		</div>
+
+		<div>
+			<p class="nanogame_messages_class" id="nanogame_game_status_id" >game status</p>
+		</div>
 	</div>
 
-
-	<div class="nanogame_div_play_class" >
-		<span class="nanogame_label_class" >Black</span>
-		<span class="nanogame_label_class" >cards:</span>
-
-		<select class="nanogame_select_class" id="nanogame_black_selector_id" ></select>
-		<button class="nanogame_button_class" type="button" id="nanogame_black_ok_id"
-			onclick="nanogame.presenter.commit()" >OK</button>
-
-		<span class="nanogame_label_class" >play:</span>
-		<span class="nanogame_score_class" id="nanogame_black_play_id" ></span>
-
-		<span class="nanogame_label_class" >score:</span>
-		<span class="nanogame_score_class" id="nanogame_black_score_id" ></span>
+	<div>
+		<button class="nanogame_button_class" type="button" id="nanogame_debug_toggle_id" onclick="nanogame.debug.toggle()" >Debug</button>
 	</div>
 
-	<div class="nanogame_div_play_class" >
-		<p class="nanogame_messages_class" id="nanogame_game_status_id" >game status</p>
-	</div>
+	<div id="nanogame_debug_div_id" >
 
-
-	<button class="nanogame_button_class" type="button" id="nanogame_debug_toggle_id"
-		onclick="nanogame.debug.toggle()" >Debug</button>
-
-	<div class="nanogame_div_debug_class" id="nanogame_debug_div_id" >
-
-		<span>debug</span>
+		<span>Debug</span>
 
 		<button class="nanogame_button_class" type="button" id="nanogame_debug_clear_id"
 			onclick="nanogame.debug.clear_messages()" >Clear</button>
