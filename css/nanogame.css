@@ -13,113 +13,26 @@ You should have received a copy of the GNU General Public License along with thi
 
 NANOGAME-JS-COPYRIGHT-MD-END */
 
-/*
-
-{
-    font-family: Tahoma, Verdana, sans-serif;
-    font-style: normal;
-    font-size:18px;
+.nanogame-game-mat-background{
+    background-image:url(../pictures/game-mat.jpg);
+    background-origin:border-box;
+    background-position:left top;
+    background-repeat:no-repeat;
+    background-size:cover;
 }
 
-*/
-
-.nanogame_off_button_class{
-    color:black;
-    background-color:lightgrey;
-
-    text-align:center;
-    font-size:18px;
-    line-height:100%;
-
-    padding-left:8px;
-    padding-right:8px;
-    padding-top:9px;
-    padding-bottom:9px;
-
-    /* border-style:none; */
-    /* border-width:0px; */
-
-    margin:0px;
-
-    outline-style:none;
-    outline-width:0px;
+.nanogame-game-width{
+    width:480px;
 }
 
-.nanogame_off_select_class{
-    color:black;
-    background-color:lightgrey;
-
-    text-align:center;
-    font-size:18px;
-    line-height:100%;
-
-    padding-left:8px;
-    padding-right:8px;
-    padding-top:6px;
-    padding-bottom:6px;
-
-    /* border-style:none; */
-    /* border-width:0px; */
-
-    margin:0px;
-
-    outline-style:none;
-    outline-width:0px;
+.nanogame-control-width-ratio{
+    width:60%;
 }
 
-.nanogame_off_button_class:disabled, .nanogame_off_select_class:disabled{
-    opacity:0.5;
+.nanogame-display-width-ratio{
+    width:40%;
 }
 
-.nanogame_off_score_class{
-    color:black;
-
-    text-align:center;
-    font-size:24px;
-    line-height:100%;
-
-    padding-left:8px;
-    padding-right:8px;
-    padding-top:3px;
-    padding-bottom:8px;
-
-    border-style:none;
-    border-width:0px;
-
-    margin:0px;
-
-    outline-style:none;
-    outline-width:0px;
-}
-
-.nanogame_off_div_play_class{
-
-    background-color:lightblue;
-
-    height:50px;
-    width:400px;
-
-    padding:0px;
-    margin:2px;
-
-    outline-style:none;
-    outline-width:0px;
-}
-
-.nanogame_off_div_debug_class{
-    display:inline-block;
-
-    padding-left:0px;
-    padding-right:0px;
-    padding-top:0px;
-    padding-bottom:0px;
-
-    border-style:dashed none none none;
-    border-width:1px;
-    border-color:black;
-
-    margin:2px;
-
-    outline-style:none;
-    outline-width:0px;
+.nanogame-player-name{
+    text-transform:capitalize;
 }
