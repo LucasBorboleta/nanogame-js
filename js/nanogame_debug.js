@@ -67,19 +67,25 @@ nanogame.debug.enable = function(condition){
     }
 };
 
-nanogame.debug.toggle = function(event){
+nanogame.debug.key_listner = function(event){
     if ( event.key === 'd' ) {
-        nanogame.debug.__is_enabled = ! nanogame.debug.__is_enabled;
-        nanogame.debug.enable(nanogame.debug.__is_enabled);
+        nanogame.debug.toggle();
+
+    } else if ( event.key === 'c' ) {
+        nanogame.debug.clear_messages();
     }
+};
+
+nanogame.debug.toggle = function(event){
+    nanogame.debug.__is_enabled = ! nanogame.debug.__is_enabled;
+    nanogame.debug.enable(nanogame.debug.__is_enabled);
 };
 
 nanogame.debug.write_message = function(text){
     if ( nanogame.debug.__is_enabled ) {
         nanogame.debug.__message_count += 1 ;
-
-        nanogame.debug.__messages.innerHTML = nanogame.debug.__message_count + ":" +
-                                              text + "<br/>" + nanogame.debug.__messages.innerHTML;
+        const new_message = "<p>" + nanogame.debug.__message_count + ":" + text + "</p>";
+        nanogame.debug.__messages.innerHTML = new_message + nanogame.debug.__messages.innerHTML;
     }
 };
 ///////////////////////////////////////////////////////////////////////////////
