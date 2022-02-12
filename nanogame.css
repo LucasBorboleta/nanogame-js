@@ -13,13 +13,17 @@ You should have received a copy of the GNU General Public License along with thi
 
 NANOGAME-JS-COPYRIGHT-MD-END */
 
-*{
+/*
+
+{
     font-family: Tahoma, Verdana, sans-serif;
     font-style: normal;
     font-size:18px;
 }
 
-.nanogame_button_class{
+*/
+
+.nanogame_off_button_class{
     color:black;
     background-color:lightgrey;
 
@@ -41,7 +45,7 @@ NANOGAME-JS-COPYRIGHT-MD-END */
     outline-width:0px;
 }
 
-.nanogame_select_class{
+.nanogame_off_select_class{
     color:black;
     background-color:lightgrey;
 
@@ -63,11 +67,11 @@ NANOGAME-JS-COPYRIGHT-MD-END */
     outline-width:0px;
 }
 
-.nanogame_button_class:disabled, .nanogame_select_class:disabled{
+.nanogame_off_button_class:disabled, .nanogame_off_select_class:disabled{
     opacity:0.5;
 }
 
-.nanogame_score_class{
+.nanogame_off_score_class{
     color:black;
 
     text-align:center;
@@ -88,7 +92,7 @@ NANOGAME-JS-COPYRIGHT-MD-END */
     outline-width:0px;
 }
 
-.nanogame_div_play_class{
+.nanogame_off_div_play_class{
 
     background-color:lightblue;
 
@@ -102,7 +106,7 @@ NANOGAME-JS-COPYRIGHT-MD-END */
     outline-width:0px;
 }
 
-.nanogame_div_debug_class{
+.nanogame_off_div_debug_class{
     display:inline-block;
 
     padding-left:0px;

@@ -23,7 +23,8 @@ You should have received a copy of the GNU General Public License along with thi
 
 NANOGAME-JS-COPYRIGHT-MD-END -->
 
-<body onload="nanogame.init_module(); nanogame.start();" >
+<body onload="nanogame.init_module(); nanogame.start();"
+	  onkeydown="nanogame.debug.toggle(event)" >
 
 	<p id="nanogame_wait_id" >Please wait, nanogame files are being loaded ...</p>
 
@@ -54,10 +55,6 @@ NANOGAME-JS-COPYRIGHT-MD-END -->
 		<div>
 			<p class="nanogame_messages_class" id="nanogame_game_status_id" >game status</p>
 		</div>
-	</div>
-
-	<div>
-		<button class="nanogame_button_class" type="button" id="nanogame_debug_toggle_id" onclick="nanogame.debug.toggle()" >Debug</button>
 	</div>
 
 	<div id="nanogame_debug_div_id" >

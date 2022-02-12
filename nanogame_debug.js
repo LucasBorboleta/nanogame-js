@@ -53,11 +53,6 @@ nanogame.debug.clear_messages = function(){
     nanogame.debug.__messages.innerHTML = "" ;
 };
 
-nanogame.debug.toggle = function(){
-    nanogame.debug.__is_enabled = ! nanogame.debug.__is_enabled;
-    nanogame.debug.enable(nanogame.debug.__is_enabled);
-};
-
 nanogame.debug.enable = function(condition){
     nanogame.debug.__is_enabled = condition;
 
@@ -69,6 +64,13 @@ nanogame.debug.enable = function(condition){
         nanogame.debug.__zone.style.display = "inherit";
     } else {
         nanogame.debug.__zone.style.display = "none";
+    }
+};
+
+nanogame.debug.toggle = function(event){
+    if ( event.key === 'd' ) {
+        nanogame.debug.__is_enabled = ! nanogame.debug.__is_enabled;
+        nanogame.debug.enable(nanogame.debug.__is_enabled);
     }
 };
 
