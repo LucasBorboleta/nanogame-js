@@ -52,6 +52,30 @@ nanogame.presenter.get_selector_selection = function(player){
     return selection;
 };
 
+nanogame.presenter.play_bling_sound = function(){
+    nanogame.presenter.__bling_sound.currentTime = 0.5 * nanogame.presenter.__bling_sound.duration;
+    nanogame.presenter.__bling_sound.volume = 0.5;
+    nanogame.presenter.__bling_sound.play();
+};
+
+nanogame.presenter.play_clap_sound = function(){
+    nanogame.presenter.__clap_sound.currentTime = 0.6 * nanogame.presenter.__clap_sound.duration;
+    nanogame.presenter.__clap_sound.volume = 0.3;
+    nanogame.presenter.__clap_sound.play();
+};
+
+nanogame.presenter.play_click_sound = function(){
+    nanogame.presenter.__click_sound.currentTime = 0.7 * nanogame.presenter.__click_sound.duration;
+    nanogame.presenter.__click_sound.volume = 1.0;
+    nanogame.presenter.__click_sound.play();
+};
+
+nanogame.presenter.play_slide_sound = function(){
+    nanogame.presenter.__slide_sound.currentTime = 0.4 * nanogame.presenter.__slide_sound.duration;
+    nanogame.presenter.__slide_sound.volume = 0.5;
+    nanogame.presenter.__slide_sound.play();
+};
+
 nanogame.presenter.set_observer = function(observer){
     nanogame.presenter.__observer = observer;
 };
@@ -86,6 +110,11 @@ nanogame.presenter.set_status = function(status){
 };
 
 nanogame.presenter.start = function(){
+
+    nanogame.presenter.__bling_sound = document.getElementById( "nanogame_bling_sound_id" );
+    nanogame.presenter.__clap_sound = document.getElementById( "nanogame_clap_sound_id" );
+    nanogame.presenter.__click_sound = document.getElementById( "nanogame_click_sound_id" );
+    nanogame.presenter.__slide_sound = document.getElementById( "nanogame_slide_sound_id" );
 
     nanogame.presenter.__observer = null;
 
