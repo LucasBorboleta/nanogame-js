@@ -53,25 +53,25 @@ nanogame.presenter.get_selector_selection = function(player){
 };
 
 nanogame.presenter.play_bling_sound = function(){
-    nanogame.presenter.__bling_sound.currentTime = 0.5 * nanogame.presenter.__bling_sound.duration;
-    nanogame.presenter.__bling_sound.volume = 0.5;
+    nanogame.presenter.__bling_sound.currentTime = 0.0 * nanogame.presenter.__bling_sound.duration;
+    nanogame.presenter.__bling_sound.volume = 0.8;
     nanogame.presenter.__bling_sound.play();
 };
 
 nanogame.presenter.play_clap_sound = function(){
-    nanogame.presenter.__clap_sound.currentTime = 0.6 * nanogame.presenter.__clap_sound.duration;
+    nanogame.presenter.__clap_sound.currentTime = 0.2 * nanogame.presenter.__clap_sound.duration;
     nanogame.presenter.__clap_sound.volume = 0.3;
     nanogame.presenter.__clap_sound.play();
 };
 
 nanogame.presenter.play_click_sound = function(){
-    nanogame.presenter.__click_sound.currentTime = 0.7 * nanogame.presenter.__click_sound.duration;
+    nanogame.presenter.__click_sound.currentTime = 0.4 * nanogame.presenter.__click_sound.duration;
     nanogame.presenter.__click_sound.volume = 1.0;
     nanogame.presenter.__click_sound.play();
 };
 
 nanogame.presenter.play_slide_sound = function(){
-    nanogame.presenter.__slide_sound.currentTime = 0.4 * nanogame.presenter.__slide_sound.duration;
+    nanogame.presenter.__slide_sound.currentTime = 0.2 * nanogame.presenter.__slide_sound.duration;
     nanogame.presenter.__slide_sound.volume = 0.5;
     nanogame.presenter.__slide_sound.play();
 };
@@ -82,12 +82,40 @@ nanogame.presenter.set_observer = function(observer){
 
 nanogame.presenter.set_play = function(player, play){
     const element = nanogame.presenter.__play[player];
-    element.innerHTML = "" + play;
+    const old_style_display = element.style.display;
+    const new_inner_html = "" + play;
+
+    if ( element.innerHTML !== new_inner_html ) {
+        element.innerHTML = new_inner_html;
+        element.style.display = "none";
+
+        const setter_delay = 100;
+        let setter_timeout = null;
+
+        setter_timeout = setTimeout( function(){
+            clearTimeout(setter_timeout);
+            element.style.display = old_style_display;
+            }, setter_delay);
+    }
 };
 
 nanogame.presenter.set_score = function(player, score){
     const element = nanogame.presenter.__score[player];
-    element.innerHTML = "" + score;
+    const old_style_display = element.style.display;
+    const new_inner_html = "" + score;
+
+    if ( element.innerHTML !== new_inner_html ) {
+        element.innerHTML = new_inner_html;
+        element.style.display = "none";
+
+        const setter_delay = 100;
+        let setter_timeout = null;
+
+        setter_timeout = setTimeout( function(){
+            clearTimeout(setter_timeout);
+            element.style.display = old_style_display;
+            }, setter_delay);
+    }
 };
 
 nanogame.presenter.set_selector_options = function(player, options){

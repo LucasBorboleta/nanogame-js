@@ -84,11 +84,13 @@ nanogame.broker.update_presenter = function(){
     nanogame.presenter.set_score(nanogame.defs.white_player, nanogame.game.get_score(nanogame.defs.white_player));
     nanogame.presenter.set_score(nanogame.defs.black_player, nanogame.game.get_score(nanogame.defs.black_player));
 
+    const empty_play = "_";
+
     {
         const white_play = nanogame.game.get_play(nanogame.defs.white_player);
 
         if ( white_play == null )  {
-            nanogame.presenter.set_play(nanogame.defs.white_player, "?");
+            nanogame.presenter.set_play(nanogame.defs.white_player, empty_play);
         } else {
             nanogame.presenter.set_play(nanogame.defs.white_player, white_play);
         }
@@ -98,7 +100,7 @@ nanogame.broker.update_presenter = function(){
         const black_play = nanogame.game.get_play(nanogame.defs.black_player);
 
         if ( black_play == null )  {
-            nanogame.presenter.set_play(nanogame.defs.black_player, "?");
+            nanogame.presenter.set_play(nanogame.defs.black_player, empty_play);
         } else {
             nanogame.presenter.set_play(nanogame.defs.black_player, black_play);
         }
@@ -116,7 +118,7 @@ nanogame.broker.update_presenter = function(){
             }
         } else {
             nanogame.presenter.set_selector_options(nanogame.defs.white_player, []);
-            nanogame.presenter.set_selector_selection(nanogame.defs.white_player, "");
+            nanogame.presenter.set_selector_selection(nanogame.defs.white_player, "" );
         }
     }
 
@@ -140,14 +142,14 @@ nanogame.broker.update_presenter = function(){
 
         if ( nanogame.game.get_winner() === nanogame.defs.white_player )  {
             nanogame.presenter.play_clap_sound();
-            nanogame.presenter.set_status("White wins !");
+            nanogame.presenter.set_status( "White wins !" );
 
         } else if ( nanogame.game.get_winner() === nanogame.defs.black_player ) {
             nanogame.presenter.play_clap_sound();
-            nanogame.presenter.set_status("Black wins !");
+            nanogame.presenter.set_status( "Black wins !" );
 
         } else {
-            nanogame.presenter.set_status("Nobody wins !");
+            nanogame.presenter.set_status( "Nobody wins !" );
             nanogame.presenter.play_bling_sound();
         }
 
@@ -157,10 +159,10 @@ nanogame.broker.update_presenter = function(){
         nanogame.presenter.enable_selector(nanogame.game.get_active_player(), true);
 
         if ( nanogame.game.get_active_player() === nanogame.defs.white_player ) {
-            nanogame.presenter.set_status("White turn ...");
+            nanogame.presenter.set_status( "White turn ..." );
 
         } else if ( nanogame.game.get_active_player() === nanogame.defs.black_player ) {
-            nanogame.presenter.set_status("Black turn ...");
+            nanogame.presenter.set_status( "Black turn ..." );
         }
     }
 };

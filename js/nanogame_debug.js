@@ -45,7 +45,7 @@ nanogame.debug.assert = function(condition, message){
 
     console.assert(condition, message);
     if ( ! condition ) {
-        nanogame.debug.write_message("assertion failed: " + message);
+        nanogame.debug.write_message( "assertion failed: " + message);
     }
 };
 
