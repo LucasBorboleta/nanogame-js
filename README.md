@@ -1,8 +1,10 @@
 # Nanogame-js
 
- Using JavaScript, **nanogame-js** implements a GUI and a rules engine for the **nanogame** boardgame. The intent is then to learn how to implement a game on the [Board Game Arena](https://fr.boardgamearena.com/) (BGA) and also to test some architecture principle.
+Using JavaScript, **nanogame-js** implements a GUI and a rules engine for the **Nanogame** boardgame. The intent is then to learn how to implement a game on the [Board Game Arena](https://fr.boardgamearena.com/) (BGA) and also to test some architecture principle.
 
-The rules of **nanogame** are the following:
+![](./pictures/nanogame-overview.png)
+
+The rules of **Nanogame** are the following:
 
 - Two players are involved: white and black.
 - It is a turn-based game. White starts the play.
