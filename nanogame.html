@@ -29,27 +29,27 @@ NANOGAME-JS-COPYRIGHT-MD-END -->
 
 <body onload="nanogame.init_module(); nanogame.start();" onkeydown="nanogame.debug.key_listner(event);" >
 
-	<div class="nanogame-game-width ">
+	<div class="nanogame-game-width" >
 
 		<p id="nanogame_wait_id" >Please wait, nanogame files are being loaded ...</p>
 
-		<audio preload="auto" id="nanogame_bling_sound_id">
-			 <source src="sounds/bling.mp3" type="audio/mpeg">
+		<audio preload="auto" id="nanogame_bling_sound_id" >
+			 <source src="sounds/bling.mp3" type="audio/mpeg" >
 		  	<p>Your browser does not support the audio element.</p>
 		</audio>
 
-		<audio preload="auto" id="nanogame_clap_sound_id">
-			 <source src="sounds/clap.mp3" type="audio/mpeg">
+		<audio preload="auto" id="nanogame_clap_sound_id" >
+			 <source src="sounds/clap.mp3" type="audio/mpeg" >
 		  	<p>Your browser does not support the audio element.</p>
 		</audio>
 
-		<audio preload="auto" id="nanogame_click_sound_id">
-			 <source src="sounds/click.mp3" type="audio/mpeg">
+		<audio preload="auto" id="nanogame_click_sound_id" >
+			 <source src="sounds/click.mp3" type="audio/mpeg" >
 		  	<p>Your browser does not support the audio element.</p>
 		</audio>
 
-		<audio preload="auto" id="nanogame_slide_sound_id">
-			<source src="sounds/slide.mp3" type="audio/mpeg">
+		<audio preload="auto" id="nanogame_slide_sound_id" >
+			<source src="sounds/slide.mp3" type="audio/mpeg" >
 		  	<p>Your browser does not support the audio element.</p>
 		</audio>
 
@@ -65,7 +65,7 @@ NANOGAME-JS-COPYRIGHT-MD-END -->
 
 					<div class="w3-container w3-row" >
 						<div class="w3-container w3-col" style="width:50%" >
-							<h2 class="nanogame-player-name">white</h2>
+							<h2 class="nanogame-player-name" >white</h2>
 						</div>
 						<div class="w3-container w3-col" style="width:50%" >
 							<span class="w3-xxxlarge" id="nanogame_white_score_id" ></span><span class="w3-xxxlarge w3-text-yellow" >&#9734;</span>
@@ -78,14 +78,14 @@ NANOGAME-JS-COPYRIGHT-MD-END -->
 						</div>
 
 						<div class="w3-panel w3-col" style="width:50%" >
-							<button class="w3-button w3-border" type="button" id="nanogame_white_ok_id" onclick="nanogame.presenter.commit()" >OK</button>
+							<button class="w3-button w3-white w3-border" type="button" id="nanogame_white_ok_id" onclick="nanogame.presenter.commit()" >OK</button>
 						</div>
 					</div>
 
 				</div> <!-- END: white control zone -->
 
 				<div class="w3-container w3-col nanogame-display-width-ratio" > <!-- BEGIN: white display zone -->
-					<div class="w3-panel w3-card w3-border w3-center w3-jumbo w3-white" >
+					<div class="w3-panel w3-card-4 w3-white w3-border w3-border-white w3-jumbo w3-center" >
 						<span id="nanogame_white_play_id" ></span>
 					</div>
 				</div> <!-- END: white display zone -->
@@ -98,7 +98,7 @@ NANOGAME-JS-COPYRIGHT-MD-END -->
 
 					<div class="w3-container w3-row" >
 						<div class="w3-container w3-col" style="width:50%" >
-							<h2 class="nanogame-player-name">black</h2>
+							<h2 class="nanogame-player-name" >black</h2>
 						</div>
 						<div class="w3-container w3-col" style="width:50%" >
 							<span class="w3-xxxlarge" id="nanogame_black_score_id" ></span><span class="w3-xxxlarge w3-text-yellow" >&#9734;</span>
@@ -111,14 +111,14 @@ NANOGAME-JS-COPYRIGHT-MD-END -->
 						</div>
 
 						<div class="w3-panel w3-col" style="width:50%" >
-							<button class="w3-button w3-border" type="button" id="nanogame_black_ok_id" onclick="nanogame.presenter.commit()" >OK</button>
+							<button class="w3-button w3-white w3-border" type="button" id="nanogame_black_ok_id" onclick="nanogame.presenter.commit()" >OK</button>
 						</div>
 					</div>
 
 				</div> <!-- END: black control zone -->
 
 				<div class="w3-container w3-col nanogame-display-width-ratio" > <!-- BEGIN: black display zone -->
-					<div class="w3-panel w3-card w3-border w3-center w3-jumbo w3-black" >
+					<div class="w3-panel w3-card-4 w3-black w3-border w3-border-black w3-jumbo w3-center" >
 						<span id="nanogame_black_play_id" ></span>
 					</div>
 				</div> <!-- END: black display zone -->
