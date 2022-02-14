@@ -40,12 +40,12 @@ The management of the Game is distributed to the following modules:
 The sequence of the interactions is as follows:
 
 * For each player browser, BGA creates the broker with the information `broker_player` of the player to be served.
-*  From BGA, Broker receives a request as a triple `(game_is_terminated, game_exported_state, game_player)` to be understood as follows: 
-  * If `game_is_terminated == True` then `game_exported_state` is expected not to be `None`and `game_player` is expected to be `None`:
+*  From BGA, Broker receives a request as a triple `(game_game_terminated, game_exported_state, game_player)` to be understood as follows: 
+  * If `game_game_terminated == True` then `game_exported_state` is expected not to be `None`and `game_player` is expected to be `None`:
     * Broker updates  Game with `game_exported_state`. 
     * Broker requests to Game the current positions to be displayed. 
     * Broker requests Presenter to render such positions.
-  * If `game_is_terminated == False` and`game_exported_state == None` then `game_player` is expected no to be `None`:
+  * If `game_game_terminated == False` and`game_exported_state == None` then `game_player` is expected no to be `None`:
     * Broker creates a new instance of Game. 
     * Broker requests to Game the current positions to be displayed. 
     * Broker requests Presenter to render such positions.
@@ -54,11 +54,11 @@ The sequence of the interactions is as follows:
       * Broker requests Presenter to render such moves.
       * Broker requests Presenter to return chosen move by the active player
       * Broker updates Game with returned choice.
-      * Broker requests Game to export its status as a triple `(game_is_terminated, Game_exported_state, Game_player)`.
+      * Broker requests Game to export its status as a triple `(game_game_terminated, Game_exported_state, Game_player)`.
       * Broker sends such triple to BGA.
       * BGA records the triple in its SQL database.
       * For each player browser, BGA sends such triple to each Broker.
-  * If `game_is_terminated == False` and`game_exported` is not `None` then `game_player` is expected no to be `None`:
+  * If `game_game_terminated == False` and`game_exported` is not `None` then `game_player` is expected no to be `None`:
     * Broker updates Game with `game_exported_state`. 
     * Then the sequence continues as the previous one.
 

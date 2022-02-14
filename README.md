@@ -8,10 +8,8 @@ The rules of **Nanogame** are the following:
 
 - Two players are involved: white and black.
 - It is a turn-based game. White starts the play.
-- Each player receives 5 cards randomly selected from a set of ten cards, that are numbered from 1 to 10. The received cards are visible for their owner, but are hidden to the opponent.
-- On his turn, the white player selects one card which becomes visible to his opponent.
-- The black player does the same.
-- When the two selected cards are known the score is updated: +1 to the owner of the higher card.
-- The game ends when all cards have been selected. The player with the highest score wins.
+- Each player receives 5 cards randomly selected from a shared deck of cards numbered from 1 to 15. The received cards are visible for their owner, but are hidden to the opponent.
+- On his turn, the active player selects one card which becomes visible to his opponent. The opponent does the same. The owner of the highest played card has his score incremented by 1 point and becomes the next active player.
+- The game ends when all player cards have been played. The winner is the player with the highest score.
 
 If you intent to derive or to sell either a text, a product or a software from this work, then read the [**LICENSE**](./docs/LICENSE.txt) and the  [**COPYRIGHT**](./docs/COPYRIGHT.md)  documents.

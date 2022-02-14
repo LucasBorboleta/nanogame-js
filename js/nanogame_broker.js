@@ -61,18 +61,19 @@ nanogame.broker.update_from_observable = function(observable){
     nanogame.broker.disable_interaction();
     nanogame.presenter.play_click_sound();
 
-    // A delay is required to display black play.
-    // So let's have a delay after each play, either white or black.
+    // A delay is required to display each played card
     const broker_delay = 1000;
     let broker_timeout = null;
 
     broker_timeout = setTimeout( function(){
         clearTimeout(broker_timeout);
 
-        if ( nanogame.game.get_active_player() === nanogame.defs.black_player ) {
+        if ( nanogame.game.round_terminated() ) {
             nanogame.presenter.play_slide_sound();
         }
+
         nanogame.game.update();
+
         nanogame.broker.update_presenter();
         }, broker_delay);
 };
@@ -138,7 +139,7 @@ nanogame.broker.update_presenter = function(){
         }
     }
 
-    if ( nanogame.game.is_terminated() ) {
+    if ( nanogame.game.game_terminated() ) {
 
         if ( nanogame.game.get_winner() === nanogame.defs.white_player )  {
             nanogame.presenter.play_clap_sound();

@@ -28,9 +28,9 @@ nanogame.defs.init_module = function(){
     // Init inner classes
     // None
 
-    nanogame.defs.card_min = 1;
-    nanogame.defs.card_max = 10;
-    nanogame.defs.card_count = 5;
+    nanogame.defs.deck_card_min = 1;
+    nanogame.defs.deck_card_max = 15;
+    nanogame.defs.player_card_max = 5;
 
     nanogame.defs.white_player = 0;
     nanogame.defs.black_player = 1;
