@@ -38,6 +38,27 @@ import sys
 _default_port=8080
 
 
+def get_log_path():
+    log_path = os.path.join(get_tmpdir_path(), os.path.basename(__file__) + ".log.txt")
+    return log_path
+
+
+def get_project_home():
+    project_home = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return project_home
+
+def get_pid_path():
+    pid_path = os.path.join(get_tmpdir_path(), "pid.txt")
+    return pid_path
+
+
+def get_tmpdir_path():  
+    tmpdir_path = os.path.join(get_project_home(), "tmp")
+    if not os.path.isdir(tmpdir_path):
+        os.mkdir(tmpdir_path)
+    return tmpdir_path
+
+
 class Unbuffered(object):
 
    def __init__(self, stream):
@@ -53,7 +74,7 @@ class Unbuffered(object):
 
    def __getattr__(self, attr):
        return getattr(self.stream, attr)
-
+    
 
 class StoppableHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     """http request handler with QUIT stopping the server"""
@@ -74,44 +95,44 @@ class StoppableHttpServer(socketserver.TCPServer):
         super(StoppableHttpServer, self).__init__(*args, **kwargs)
         self.nanogame_stop = False
 
+        pid = os.getpid()
+        pid_stream = open(get_pid_path(), "w")
+        pid_stream.write("%d\n" % pid)
+        pid_stream.close()  
+        print("StoppableHttpServer.__init__: server process has pid=%d" % pid)
+
 
     def service_actions(self):
         if self.nanogame_stop:
-            print("StoppableHttpServer.service_actions: killing the server process ...")
-            os.kill(os.getpid(), signal.SIGABRT)
+            print("StoppableHttpServer.service_actions: shutting down the server ...")
+            self.shutdown()
+            print("StoppableHttpServer.service_actions: shutting down the server done")
 
 
 def start_server(port=_default_port):
-    project_home = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-    tmp_path = os.path.join(project_home, "tmp")
-    if not os.path.isdir(tmp_path):
-        os.mkdir(tmp_path)
-
-    log_path = os.path.join(tmp_path, os.path.basename(__file__) + ".log.txt")
-    log_stream = open(log_path, "w")
     
-    if False:
-        sys.stdout = Unbuffered(log_stream)
-        sys.stderr = sys.stdout
+    sys.stdout = Unbuffered(open(get_log_path(), "w"))
+    sys.stderr = sys.stdout
 
     print()
     print( "Hello " + datetime.datetime.now().isoformat() )
     print()
 
-    os.chdir(project_home)
+    os.chdir(get_project_home())
 
-    with StoppableHttpServer(("localhost", port), StoppableHttpRequestHandler) as server:
-        print()
-        print( "Serving NANOGAME at port %d." % port )
-        print()
-        print( "Open the URL http://localhost:%d in your web browser." % port )
-        print()
-        print( "For stopping the server:" )
-        print( "  1) Quit your web browser." )
-        print( "  2) Execute the script 'tools/http_stop_server.py'." )
-        print()
-        server.serve_forever()
+    server = StoppableHttpServer(("localhost", port), StoppableHttpRequestHandler)
+    
+    print()
+    print( "Serving NANOGAME at port %d." % port )
+    print()
+    print( "Open the URL http://localhost:%d in your web browser." % port )
+    print()
+    print( "For stopping the server:" )
+    print( "  1) Quit your web browser." )
+    print( "  2) Execute the script 'tools/http_stop_server.py'." )
+    print()
+    
+    server.serve_forever()
 
     print()
     print( "Bye " + datetime.datetime.now().isoformat() )
@@ -120,10 +141,22 @@ def start_server(port=_default_port):
 
 def stop_server(port=_default_port):
     """send QUIT request to http server running on localhost:<port>"""
+    
     connection = http.client.HTTPConnection(host="localhost", port=port, timeout=10)
     connection.request(method="QUIT", url="/")
     connection.getresponse()
     connection.close()
+
+
+def kill_server(port=_default_port):
+    """skill the server process"""
+    
+    pid_stream = open(get_pid_path(), "r")
+    pid = int(pid_stream.read().strip())
+    pid_stream.close()
+    print("stop_server: kill server process with pid=%d ..." % pid)
+    os.kill(pid, signal.SIGINT)
+    ###os.kill(pid, signal.SIGABRT)
 
 
 if __name__ == "__main__":
