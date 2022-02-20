@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 
 """
-Start/stop a simple HTTP server in order to test the behavior of the the NANOGAME game
-when the HTML pages are served by a web site
-
+Manage a simple HTTP server to test the NANOGAME game
 
 Credits:
 1) https://docs.python.org/2/library/simplehttpserver.html?highlight=simplehttpserver
@@ -33,7 +31,11 @@ import http.server
 import http.client
 import os
 import socketserver
+import signal
 import sys
+
+
+_default_port=8080
 
 
 class Unbuffered(object):
@@ -60,21 +62,27 @@ class StoppableHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
         """send 200 OK response, and set server.stop to True"""
         self.send_response(200)
         self.end_headers()
-        self.server.stop = True
-
+        print("StoppableHttpRequestHandler.do_QUIT: server.nanogame_stop=True ...")
+        self.server.nanogame_stop = True
+        
 
 class StoppableHttpServer(socketserver.TCPServer):
     """http server that reacts to self.stop flag"""
+    
+    
+    def __init__(self, *args, **kwargs):
+        super(StoppableHttpServer, self).__init__(*args, **kwargs)
+        self.nanogame_stop = False
 
-    def serve_forever (self):
-        """Handle one request at a time until stopped."""
-        self.stop = False
-        while not self.stop:
-            self.handle_request()
+
+    def service_actions(self):
+        if self.nanogame_stop:
+            print("StoppableHttpServer.service_actions: killing the server process ...")
+            os.kill(os.getpid(), signal.SIGABRT)
 
 
-def start_server(port=8080):
-    project_home = os.path.dirname(os.path.abspath(__file__))
+def start_server(port=_default_port):
+    project_home = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     tmp_path = os.path.join(project_home, "tmp")
     if not os.path.isdir(tmp_path):
@@ -82,8 +90,10 @@ def start_server(port=8080):
 
     log_path = os.path.join(tmp_path, os.path.basename(__file__) + ".log.txt")
     log_stream = open(log_path, "w")
-    sys.stdout = Unbuffered(log_stream)
-    sys.stderr = sys.stdout
+    
+    if False:
+        sys.stdout = Unbuffered(log_stream)
+        sys.stderr = sys.stdout
 
     print()
     print( "Hello " + datetime.datetime.now().isoformat() )
@@ -91,7 +101,7 @@ def start_server(port=8080):
 
     os.chdir(project_home)
 
-    with StoppableHttpServer(("", port), StoppableHttpRequestHandler) as server:
+    with StoppableHttpServer(("localhost", port), StoppableHttpRequestHandler) as server:
         print()
         print( "Serving NANOGAME at port %d." % port )
         print()
@@ -99,7 +109,7 @@ def start_server(port=8080):
         print()
         print( "For stopping the server:" )
         print( "  1) Quit your web browser." )
-        print( "  2) In a terminal execute the Python script 'http_server.py stop'." )
+        print( "  2) Execute the script 'tools/http_stop_server.py'." )
         print()
         server.serve_forever()
 
@@ -108,22 +118,13 @@ def start_server(port=8080):
     print()
 
 
-def stop_server(port=8080):
+def stop_server(port=_default_port):
     """send QUIT request to http server running on localhost:<port>"""
-    connection = http.client.HTTPConnection("localhost:%d" % port)
-    connection.request("QUIT", "/")
+    connection = http.client.HTTPConnection(host="localhost", port=port, timeout=10)
+    connection.request(method="QUIT", url="/")
     connection.getresponse()
+    connection.close()
 
 
 if __name__ == "__main__":
-
-    assert len(sys.argv) == 2
-    assert sys.argv[1] in ["start", "stop"]
-
-    if sys.argv[1] == "start":
-        start_server(port=8080)
-
-    elif sys.argv[1] == "stop":
-        stop_server(port=8080)
-
-    sys.exit(0)
+    pass
