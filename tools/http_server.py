@@ -30,6 +30,7 @@ import datetime
 import http.server
 import http.client
 import os
+import re
 import socketserver
 import signal
 import sys
@@ -79,12 +80,33 @@ class Unbuffered(object):
 class StoppableHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     """http request handler with QUIT stopping the server"""
 
+
+    def do_GET (self):
+        
+        incr_rule = re.compile(r'/:INCR:(?P<incr_arg>[0-9]+)$')
+        incr_match = incr_rule.match(self.path)
+                    
+        if incr_match:
+            self.send_response(200)
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
+            
+            incr_input = int(incr_match.group('incr_arg'))
+            incr_output = str(incr_input + 1)
+            self.wfile.write(bytes(str(incr_output).encode("utf-8")))
+            
+        else:
+            super(StoppableHttpRequestHandler, self).do_GET()
+
+
+
     def do_QUIT (self):
         """send 200 OK response, and set server.stop to True"""
         self.send_response(200)
         self.end_headers()
         print("StoppableHttpRequestHandler.do_QUIT: server.nanogame_stop=True ...")
         self.server.nanogame_stop = True
+
         
 
 class StoppableHttpServer(socketserver.TCPServer):

@@ -35,6 +35,8 @@ nanogame.debug.init_module = function(){
     nanogame.debug.__is_enabled = false;
     nanogame.debug.enable(nanogame.debug.__is_enabled);
 
+    nanogame.debug.__test_data = 123;
+
     nanogame.debug.write_message( "nanogame.debug.init_module(): done" );
 };
 
@@ -73,7 +75,10 @@ nanogame.debug.key_listner = function(event){
 
     } else if ( event.key === 'c' ) {
         nanogame.debug.clear_messages();
-    }
+
+    } else if ( event.key === 't' ) {
+        nanogame.debug.__perform_some_test();
+   }
 };
 
 nanogame.debug.toggle = function(event){
@@ -88,4 +93,20 @@ nanogame.debug.write_message = function(text){
         nanogame.debug.__messages.innerHTML = new_message + nanogame.debug.__messages.innerHTML;
     }
 };
+
+nanogame.debug.__perform_some_test = function(text){
+    nanogame.debug.write_message( "nanogame.debug.__perform_some_test: ...");
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+           nanogame.debug.__test_data = parseInt(xhttp.responseText)
+           nanogame.debug.write_message( "nanogame.debug.__perform_some_test: " + nanogame.debug.__test_data );
+        }
+    };
+    xhttp.open("GET", ":INCR:" + nanogame.debug.__test_data, true);
+    xhttp.send();
+
+    nanogame.debug.write_message( "nanogame.debug.__perform_some_test: done");
+}
 ///////////////////////////////////////////////////////////////////////////////
