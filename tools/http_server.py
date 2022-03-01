@@ -29,6 +29,7 @@ NANOGAME-THE-PROGRAM-LICENSE-MD-END
 import datetime
 import http.server
 import http.client
+import json
 import os
 import re
 import socketserver
@@ -60,6 +61,15 @@ def get_tmpdir_path():
     return tmpdir_path
 
 
+def singleton(class_):
+    instances = {}
+    def getinstance(*args, **kwargs):
+        if class_ not in instances:
+            instances[class_] = class_(*args, **kwargs)
+        return instances[class_]
+    return getinstance
+
+
 class Unbuffered(object):
 
    def __init__(self, stream):
@@ -75,60 +85,95 @@ class Unbuffered(object):
 
    def __getattr__(self, attr):
        return getattr(self.stream, attr)
+
+
+@singleton
+class NanogameCommander():
+
+    ### 
+    
+    def __init__(self):
+        self.__register_commands()
+        self.__next = 1_000
+
+
+    def __register_commands(self):
+        self.__commands = dict()
+        self.__commands["INCR"] = self.__command_incr
+        self.__commands["NEXT"] = self.__command_next
+
+
+    def execute(self, command_name, command_input):
+        command_output = self.__commands[command_name](command_input)
+        return command_output
+        
+    ### commands
+    
+    def __command_incr(self, command_input):
+        command_output = command_input + 1
+        return command_output
+
+    
+    def __command_next(self, command_input):
+        self.__next += 10
+        command_output = self.__next
+        return command_output
     
 
-class StoppableHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
-    """http request handler with QUIT stopping the server"""
+class NanogameHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
+    """Http request handler for Nanogame"""
 
 
-    def do_GET (self):
+    def do_POST(self):
         
-        incr_rule = re.compile(r'/:INCR:(?P<incr_arg>[0-9]+)$')
-        incr_match = incr_rule.match(self.path)
+        command_rule = re.compile(r'^.*/:NANO:[0-9]+:(?P<command_name>[A-Z]+):(?P<command_input>.*)$')
+        command_match = command_rule.match(self.path)
                     
-        if incr_match:
+        if command_match:
+
+            command_name = command_match.group('command_name')
+            command_input = json.loads(command_match.group('command_input'))
+            command_output = NanogameCommander().execute(command_name, command_input)
+            
             self.send_response(200)
             self.send_header('Content-type', 'text/plain')
             self.end_headers()
-            
-            incr_input = int(incr_match.group('incr_arg'))
-            incr_output = str(incr_input + 1)
-            self.wfile.write(bytes(str(incr_output).encode("utf-8")))
+            self.wfile.write(bytes(json.dumps(command_output).encode("utf-8")))
             
         else:
-            super(StoppableHttpRequestHandler, self).do_GET()
+            super().do_POST()
 
 
-
-    def do_QUIT (self):
+    def do_QUIT(self):
         """send 200 OK response, and set server.stop to True"""
         self.send_response(200)
         self.end_headers()
-        print("StoppableHttpRequestHandler.do_QUIT: server.nanogame_stop=True ...")
+        print("NanogameHttpRequestHandler.do_QUIT: server.nanogame_stop=True ...")
         self.server.nanogame_stop = True
 
         
 
-class StoppableHttpServer(socketserver.TCPServer):
-    """http server that reacts to self.stop flag"""
+class NanogameHttpServer(socketserver.TCPServer):
+    """Http server handler for Nanogame that reacts to self.stop flag"""
+
     
     
     def __init__(self, *args, **kwargs):
-        super(StoppableHttpServer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.nanogame_stop = False
 
         pid = os.getpid()
         pid_stream = open(get_pid_path(), "w")
         pid_stream.write("%d\n" % pid)
         pid_stream.close()  
-        print("StoppableHttpServer.__init__: server process has pid=%d" % pid)
+        print("NanogameHttpServer.__init__: server process has pid=%d" % pid)
 
 
     def service_actions(self):
         if self.nanogame_stop:
-            print("StoppableHttpServer.service_actions: shutting down the server ...")
+            print("NanogameHttpServer.service_actions: shutting down the server ...")
             self.shutdown()
-            print("StoppableHttpServer.service_actions: shutting down the server done")
+            print("NanogameHttpServer.service_actions: shutting down the server done")
 
 
 def start_server(port=_default_port):
@@ -141,21 +186,21 @@ def start_server(port=_default_port):
     print()
 
     os.chdir(get_project_home())
-
-    server = StoppableHttpServer(("localhost", port), StoppableHttpRequestHandler)
     
-    print()
-    print( "Serving NANOGAME at port %d." % port )
-    print()
-    print( "Open the URL http://localhost:%d in your web browser." % port )
-    print()
-    print( "For stopping the server:" )
-    print( "  1) Quit your web browser." )
-    print( "  2) Execute the script 'tools/http_stop_server.py'." )
-    print()
+    with NanogameHttpServer(("localhost", port), NanogameHttpRequestHandler) as server:
     
-    server.serve_forever()
-
+        print()
+        print( "Serving NANOGAME at port %d." % port )
+        print()
+        print( "Open the URL http://localhost:%d in your web browser." % port )
+        print()
+        print( "For stopping the server:" )
+        print( "  1) Quit your web browser." )
+        print( "  2) Execute the script 'tools/http_stop_server.py'." )
+        print()
+        
+        server.serve_forever(poll_interval=0.100)
+        
     print()
     print( "Bye " + datetime.datetime.now().isoformat() )
     print()

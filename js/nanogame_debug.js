@@ -95,18 +95,25 @@ nanogame.debug.write_message = function(text){
 };
 
 nanogame.debug.__perform_some_test = function(text){
-    nanogame.debug.write_message( "nanogame.debug.__perform_some_test: ...");
 
-    const xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(){
-        if (this.readyState == 4 && this.status == 200) {
-           nanogame.debug.__test_data = parseInt(xhttp.responseText)
-           nanogame.debug.write_message( "nanogame.debug.__perform_some_test: " + nanogame.debug.__test_data );
-        }
+    nanogame.debug.write_message( "command_output_reader: before __test_data=" + nanogame.debug.__test_data);
+    const command_name = "INCR";
+    const command_input = nanogame.debug.__test_data;
+    const command_output_reader = function(command_output){
+        nanogame.debug.__test_data = parseInt(command_output)
+        nanogame.debug.write_message( "command_output_reader: after __test_data=" + nanogame.debug.__test_data);
     };
-    xhttp.open("GET", ":INCR:" + nanogame.debug.__test_data, true);
-    xhttp.send();
 
-    nanogame.debug.write_message( "nanogame.debug.__perform_some_test: done");
+
+    /*
+    const command_name = "NEXT";
+    const command_input = null;
+    const command_output_reader = function(command_output){
+        const next = parseInt(command_output)
+        nanogame.debug.write_message( "command_output_reader: after next=" + next);
+    };
+    */
+
+    nanogame.server.request(command_name, command_input, command_output_reader);
 }
 ///////////////////////////////////////////////////////////////////////////////
