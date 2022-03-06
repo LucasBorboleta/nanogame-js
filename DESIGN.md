@@ -40,6 +40,7 @@ The management of the Game is distributed to the following modules:
 The sequence of the interactions is as follows:
 
 * For each player browser, BGA creates the broker with the information `broker_player` of the player to be served.
+
 *  From BGA, Broker receives a request as a triple `(game_game_terminated, game_exported_state, game_player)` to be understood as follows: 
   * If `game_game_terminated == True` then `game_exported_state` is expected not to be `None`and `game_player` is expected to be `None`:
     * Broker updates  Game with `game_exported_state`. 
@@ -61,4 +62,13 @@ The sequence of the interactions is as follows:
   * If `game_game_terminated == False` and`game_exported` is not `None` then `game_player` is expected no to be `None`:
     * Broker updates Game with `game_exported_state`. 
     * Then the sequence continues as the previous one.
+  
+  ## States
+  
+  About states:
+  
+  - Registering-Players : waiting for two players ; third and subsequent players are just spectators.
+  
+  * Assigning-Roles : decision about who plays white or black.
+  * Playing-Game : display the game state to all players and handle player decision ; at game termination this state is kept, but nothing append.
 

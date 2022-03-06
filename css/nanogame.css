@@ -33,6 +33,6 @@ NANOGAME-JS-COPYRIGHT-MD-END */
     width:40%;
 }
 
-.nanogame-player-name{
+.nanogame-role-name{
     text-transform:capitalize;
 }

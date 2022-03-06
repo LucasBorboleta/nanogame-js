@@ -28,10 +28,27 @@ nanogame.server.init_module = function(){
     // Init inner classes
     // None
 
+    if ( (window.location.protocol === "http:" || window.location.protocol === "https:") && window.location.hostname !== "" ) {
+            nanogame.server.is_running = true;
+
+    } else if ( window.location.protocol === "file:" || window.location.hostname === "" ) {
+        nanogame.server.is_running = false;
+
+    } else {
+        nanogame.server.is_running = false;
+    }
+
+    nanogame.debug.write_message( "nanogame.server.init_module(): nanogame.server.is_running=" + nanogame.server.is_running);
+
     nanogame.debug.write_message( "nanogame.server.init_module(): done" );
 };
 
 nanogame.server.request = function(command_name, command_input, command_output_reader){
+
+    if ( ! nanogame.server.is_running ) {
+        nanogame.debug.write_message( "nanogame.server.request(): call is ignored, because server is not running !" );
+        return;
+    }
 
     const xhttp = new XMLHttpRequest();
 
@@ -45,7 +62,9 @@ nanogame.server.request = function(command_name, command_input, command_output_r
     // Prepare random_digit_string for avoiding caching (not useful with "POST" method)
     const random_digit_string = Math.random().toString().replace(".", "");
     const url = "/:NANO:" + random_digit_string + ":" + command_name + ":" + JSON.stringify(command_input);
-    xhttp.open("POST", url, true);
+    const async = true;
+    const method = "POST";
+    xhttp.open(method, url, async);
     xhttp.send();
 }
 /////////////////////////////////////////////////////////////////////////

@@ -27,6 +27,9 @@ nanogame.broker.init_module = function(){
     nanogame.defs.init_module();
     nanogame.game.init_module();
     nanogame.presenter.init_module();
+    nanogame.server.init_module();
+
+    nanogame.broker.served_player = null;
 
     // Init inner classes
     // None
@@ -44,8 +47,41 @@ nanogame.broker.disable_interaction = function(){
 };
 
 nanogame.broker.start = function(){
-    nanogame.game.start();
     nanogame.presenter.start();
+
+    if ( nanogame.server.is_running ) {
+        nanogame.presenter.show_roles_zone(true);
+        nanogame.presenter.show_player_name(true);
+
+        if ( nanogame.broker.served_player === null ) {
+            const command_name = "NEW_PLAYER";
+            const command_input = null;
+            const command_output_reader = function(command_output){
+                nanogame.broker.served_player = command_output;
+                nanogame.presenter.set_client_player_name(nanogame.broker.served_player);
+                nanogame.broker.start();
+            }
+            nanogame.server.request(command_name, command_input, command_output_reader);
+            return;
+        }
+    } else {
+        nanogame.presenter.show_roles_zone(true);
+        nanogame.presenter.show_player_name(false);
+
+        nanogame.presenter.set_player_name(0, "Alice");
+        nanogame.presenter.set_player_name(1, "Bob");
+
+        nanogame.presenter.set_role_options(0, ["Black", "White"]);
+        nanogame.presenter.set_role_options(1, ["Black", "White"]);
+
+        nanogame.presenter.set_role_selection(0, "White");
+        nanogame.presenter.set_role_selection(1, "Black");
+
+        nanogame.presenter.set_role_check(0, false);
+        nanogame.presenter.set_role_check(1, false);
+    }
+
+    nanogame.game.start();
     nanogame.presenter.set_observer(nanogame.broker);
     nanogame.broker.update_presenter();
     nanogame.debug.write_message( "nanogame.broker.start(): done" );

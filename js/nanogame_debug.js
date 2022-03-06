@@ -96,6 +96,12 @@ nanogame.debug.write_message = function(text){
 
 nanogame.debug.__perform_some_test = function(text){
 
+    nanogame.debug.write_message( "window.location.href: >" + window.location.href + "<" );
+    nanogame.debug.write_message( "window.location.hostname: >" + window.location.hostname + "<" );
+    nanogame.debug.write_message( "window.location.pathname: >" + window.location.pathname + "<" );
+    nanogame.debug.write_message( "window.location.protocol: >" + window.location.protocol + "<" );
+
+
     nanogame.debug.write_message( "command_output_reader: before __test_data=" + nanogame.debug.__test_data);
     const command_name = "INCR";
     const command_input = nanogame.debug.__test_data;

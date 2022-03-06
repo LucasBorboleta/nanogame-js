@@ -95,12 +95,14 @@ class NanogameCommander():
     def __init__(self):
         self.__register_commands()
         self.__next = 1_000
+        self.__players = list()
 
 
     def __register_commands(self):
         self.__commands = dict()
         self.__commands["INCR"] = self.__command_incr
         self.__commands["NEXT"] = self.__command_next
+        self.__commands["NEW_PLAYER"] = self.__command_new_player
 
 
     def execute(self, command_name, command_input):
@@ -118,7 +120,24 @@ class NanogameCommander():
         self.__next += 10
         command_output = self.__next
         return command_output
+ 
     
+    def __command_new_player(self, command_input):
+        player_count = len(self.__players)
+        player_count += 1
+        
+        if player_count == 1:
+            self.__players.append("Alice")
+            
+        elif player_count == 2:
+            self.__players.append("Bob")
+            
+        else:
+            self.__players.append("Eve%d" % (player_count - 2) )
+        
+        command_output = self.__players[-1]
+        return command_output
+
 
 class NanogameHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     """Http request handler for Nanogame"""
@@ -126,7 +145,7 @@ class NanogameHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_POST(self):
         
-        command_rule = re.compile(r'^.*/:NANO:[0-9]+:(?P<command_name>[A-Z]+):(?P<command_input>.*)$')
+        command_rule = re.compile(r'^.*/:NANO:[0-9]+:(?P<command_name>[A-Z_]+):(?P<command_input>.*)$')
         command_match = command_rule.match(self.path)
                     
         if command_match:
