@@ -36,18 +36,18 @@ nanogame.presenter.change_role = function(player_index){
     const role = nanogame.presenter.get_role_selection(player_index);
     nanogame.debug.write_message( "nanogame.presenter.change_role(): player_index " + player_index + " has selected role " + role);
 
-    const other_player_index = (player_index + 1) % 2;
+    const other_user_index = (player_index + 1) % 2;
 
-    var other_player_role = "";
+    var other_user_role = "";
     if ( role === "Black" ) {
-        other_player_role = "White";
+        other_user_role = "White";
     } else {
-        other_player_role = "Black";
+        other_user_role = "Black";
     }
 
     nanogame.presenter.set_role_check(player_index, true);
-    nanogame.presenter.set_role_check(other_player_index, false);
-    nanogame.presenter.set_role_selection(other_player_index, other_player_role);
+    nanogame.presenter.set_role_check(other_user_index, false);
+    nanogame.presenter.set_role_selection(other_user_index, other_user_role);
 };
 
 nanogame.presenter.check_role = function(player_index){
@@ -70,13 +70,13 @@ nanogame.presenter.enable_selector = function(player, condition){
 };
 
 nanogame.presenter.get_role_selection = function(player_index){
-    const element = nanogame.presenter.__player_role[player_index];
+    const element = nanogame.presenter.__user_role[player_index];
     const selection = element.value ;
     return selection;
 };
 
 nanogame.presenter.get_role_check = function(player_index){
-    const element = nanogame.presenter.__player_check[player_index];
+    const element = nanogame.presenter.__user_check[player_index];
     const check = element.checked ;
     return check;
 };
@@ -111,8 +111,8 @@ nanogame.presenter.play_slide_sound = function(){
     nanogame.presenter.__slide_sound.play();
 };
 
-nanogame.presenter.set_client_player_name = function(player_name){
-    const element = nanogame.presenter.__client_player_name;
+nanogame.presenter.set_client_name = function(player_name){
+    const element = nanogame.presenter.__client_name;
     element.innerHTML = "" + player_name;
 };
 
@@ -139,9 +139,19 @@ nanogame.presenter.set_play = function(player, play){
     }
 };
 
-nanogame.presenter.set_player_name = function(player_index, player_name){
-    const element = nanogame.presenter.__player_name[player_index];
-    element.innerHTML = "" + player_name;
+nanogame.presenter.set_role_check = function(player_index, condition){
+    const element = nanogame.presenter.__user_check[player_index];
+    element.checked = condition;
+};
+
+nanogame.presenter.set_role_options = function(player_index, options){
+    const element = nanogame.presenter.__user_role[player_index];
+    nanogame.presenter.__set_element_options (element, options);
+};
+
+nanogame.presenter.set_role_selection = function(player_index, selection){
+    const element = nanogame.presenter.__user_role[player_index];
+    element.value = selection;
 };
 
 nanogame.presenter.set_score = function(player, score){
@@ -163,30 +173,9 @@ nanogame.presenter.set_score = function(player, score){
     }
 };
 
-nanogame.presenter.set_role_check = function(player_index, condition){
-    const element = nanogame.presenter.__player_check[player_index];
-    element.checked = condition;
-};
-
-nanogame.presenter.set_role_options = function(player_index, options){
-    const element = nanogame.presenter.__player_role[player_index];
-    element.innerHTML = "" ;
-    for ( const option of options ) {
-        element.innerHTML += "<option value=" + "\"" +  option + "\"" + ">" + option + "</option>" ;
-    }
-};
-
-nanogame.presenter.set_role_selection = function(player_index, selection){
-    const element = nanogame.presenter.__player_role[player_index];
-    element.value = selection;
-};
-
 nanogame.presenter.set_selector_options = function(player, options){
     const element = nanogame.presenter.__selector[player];
-    element.innerHTML = "" ;
-    for ( const option of options ) {
-        element.innerHTML += "<option value=" + "\"" +  option + "\"" + ">" + option + "</option>" ;
-    }
+    nanogame.presenter.__set_element_options (element, options);
 };
 
 nanogame.presenter.set_selector_selection = function(player, selection){
@@ -200,8 +189,13 @@ nanogame.presenter.set_status = function(status){
     element.innerHTML += status
 };
 
-nanogame.presenter.show_player_name = function(condition){
-    const element = nanogame.presenter.__client_player_name;
+nanogame.presenter.set_user_name = function(player_index, player_name){
+    const element = nanogame.presenter.__user_name[player_index];
+    element.innerHTML = "" + player_name;
+};
+
+nanogame.presenter.show_client_name = function(condition){
+    const element = nanogame.presenter.__client_name;
     nanogame.presenter.__show_element(element, condition);
 };
 
@@ -212,21 +206,21 @@ nanogame.presenter.show_roles_zone = function(condition){
 
 nanogame.presenter.start = function(){
 
-    nanogame.presenter.__client_player_name = document.getElementById( "nanogame_client_player_name_id" );
+    nanogame.presenter.__client_name = document.getElementById( "nanogame_client_name_id" );
 
     nanogame.presenter.__roles_zone = document.getElementById( "nanogame_roles_div_id" );
 
-    nanogame.presenter.__player_name = []
-    nanogame.presenter.__player_name[0] = document.getElementById( "nanogame_player_name_0_id" );
-    nanogame.presenter.__player_name[1] = document.getElementById( "nanogame_player_name_1_id" );
+    nanogame.presenter.__user_name = []
+    nanogame.presenter.__user_name[0] = document.getElementById( "nanogame_user_name_0_id" );
+    nanogame.presenter.__user_name[1] = document.getElementById( "nanogame_user_name_1_id" );
 
-    nanogame.presenter.__player_role = []
-    nanogame.presenter.__player_role[0] = document.getElementById( "nanogame_player_role_0_id" );
-    nanogame.presenter.__player_role[1] = document.getElementById( "nanogame_player_role_1_id" );
+    nanogame.presenter.__user_role = []
+    nanogame.presenter.__user_role[0] = document.getElementById( "nanogame_user_role_0_id" );
+    nanogame.presenter.__user_role[1] = document.getElementById( "nanogame_user_role_1_id" );
 
-    nanogame.presenter.__player_check = []
-    nanogame.presenter.__player_check[0] = document.getElementById( "nanogame_player_check_0_id" );
-    nanogame.presenter.__player_check[1] = document.getElementById( "nanogame_player_check_1_id" );
+    nanogame.presenter.__user_check = []
+    nanogame.presenter.__user_check[0] = document.getElementById( "nanogame_user_check_0_id" );
+    nanogame.presenter.__user_check[1] = document.getElementById( "nanogame_user_check_1_id" );
 
     nanogame.presenter.__bling_sound = document.getElementById( "nanogame_bling_sound_id" );
     nanogame.presenter.__clap_sound = document.getElementById( "nanogame_clap_sound_id" );
@@ -269,6 +263,13 @@ nanogame.presenter.__enable_element = function(element, condition){
 nanogame.presenter.__notify_observer = function(){
     const observable = nanogame.presenter;
     nanogame.presenter.__observer.update_from_observable(observable);
+};
+
+nanogame.presenter.__set_element_options = function(element, options){
+    element.innerHTML = "" ;
+    for ( const option of options ) {
+        element.innerHTML += "<option value=" + "\"" +  option + "\"" + ">" + option + "</option>" ;
+    }
 };
 
 nanogame.presenter.__show_element = function(element, condition){

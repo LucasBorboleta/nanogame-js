@@ -61,6 +61,27 @@ def get_tmpdir_path():
     return tmpdir_path
 
 
+def next_key(key):
+    """ Compute the next key
+    
+     We just want to ensure a maximal cycle length, no more.
+    
+        When c ≠ 0, correctly chosen parameters allow a period equal to m, for all seed values. 
+        This will occur if and only if
+        1) m and c are relatively prime,
+        2) (a - 1) is divisible by all prime factors of m,
+        3) (a - 1) is divisible by 4 if m is divisible by 4.
+    
+        References:
+        [1] Hull, T. E.; Dobell, A. R. (July 1962). "Random Number Generators"
+        [2] Knuth, Donald (1997). Seminumerical Algorithms. The Art of Computer Programming. 2 (3rd ed.).
+    """   
+    a = 5
+    c = 3
+    m = 256
+    return (a*key + c) % m
+
+
 def singleton(class_):
     instances = {}
     def getinstance(*args, **kwargs):
@@ -96,6 +117,8 @@ class NanogameCommander():
         self.__register_commands()
         self.__next = 1_000
         self.__players = list()
+        self.__state = None
+        self.__key = 0
 
 
     def __register_commands(self):
@@ -103,6 +126,8 @@ class NanogameCommander():
         self.__commands["INCR"] = self.__command_incr
         self.__commands["NEXT"] = self.__command_next
         self.__commands["NEW_PLAYER"] = self.__command_new_player
+        self.__commands["GET_STATE"] = self.__command_get_state
+        self.__commands["SET_STATE"] = self.__command_set_state
 
 
     def execute(self, command_name, command_input):
@@ -110,6 +135,27 @@ class NanogameCommander():
         return command_output
         
     ### commands
+    
+    def __command_get_state(self, command_input):
+        command_output = dict()
+        command_output["state"] = self.__state
+        command_output["key"] = self.__key
+        return command_output
+     
+        
+    def __command_set_state(self, command_input):
+        key = command_input["key"]
+        state = command_input["state"]
+        
+        if key == next_key(self.__key):
+            self.__key = key
+            self.__state = state
+            command_output = "OK"
+        else:
+            command_output = "NOK"
+            
+        return command_output
+   
     
     def __command_incr(self, command_input):
         command_output = command_input + 1
@@ -143,7 +189,7 @@ class NanogameHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     """Http request handler for Nanogame"""
 
 
-    def do_POST(self):
+    def __doit(self):
         
         command_rule = re.compile(r'^.*/:NANO:[0-9]+:(?P<command_name>[A-Z_]+):(?P<command_input>.*)$')
         command_match = command_rule.match(self.path)
@@ -158,8 +204,22 @@ class NanogameHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header('Content-type', 'text/plain')
             self.end_headers()
             self.wfile.write(bytes(json.dumps(command_output).encode("utf-8")))
-            
+
+            return True
+        
         else:
+            return False
+
+
+    def do_GET(self):
+        
+        if not self.__doit():
+            super().do_GET()
+
+
+    def do_POST(self):
+        
+        if not self.__doit():
             super().do_POST()
 
 

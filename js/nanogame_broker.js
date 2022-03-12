@@ -29,7 +29,23 @@ nanogame.broker.init_module = function(){
     nanogame.presenter.init_module();
     nanogame.server.init_module();
 
-    nanogame.broker.served_player = null;
+    nanogame.broker.__state = null;
+    nanogame.broker.__key = 0;
+
+    nanogame.broker.__user_name = null;
+    nanogame.broker.__user_player = null;
+
+    nanogame.broker.__user_name = []
+    nanogame.broker.__user_name[0] = null;
+    nanogame.broker.__user_name[1] = null;
+
+    nanogame.broker.__user_player = []
+    nanogame.broker.__user_player[0] = null;
+    nanogame.broker.__user_player[1] = null;
+
+    nanogame.broker.__user_confirm = []
+    nanogame.broker.__user_confirm[0] = false;
+    nanogame.broker.__user_confirm[1] = false;
 
     // Init inner classes
     // None
@@ -46,19 +62,76 @@ nanogame.broker.disable_interaction = function(){
     nanogame.presenter.enable_selector(nanogame.defs.black_player, false);
 };
 
+nanogame.broker.next_key = function(key){
+    /* Compute the next key
+
+     We just want to ensure a maximal cycle length, no more.
+
+        When c ≠ 0, correctly chosen parameters allow a period equal to m, for all seed values.
+        This will occur if and only if
+        1) m and c are relatively prime,
+        2) (a - 1) is divisible by all prime factors of m,
+        3) (a - 1) is divisible by 4 if m is divisible by 4.
+
+        References:
+        [1] Hull, T. E.; Dobell, A. R. (July 1962). "Random Number Generators"
+        [2] Knuth, Donald (1997). Seminumerical Algorithms. The Art of Computer Programming. 2 (3rd ed.).
+    */
+    const a = 5;
+    const c = 3;
+    const m = 256;
+    return (a*key + c) % m;
+};
+
 nanogame.broker.start = function(){
+
     nanogame.presenter.start();
 
     if ( nanogame.server.is_running ) {
-        nanogame.presenter.show_roles_zone(true);
-        nanogame.presenter.show_player_name(true);
 
-        if ( nanogame.broker.served_player === null ) {
+        if ( nanogame.broker.__state === null ) {
+            const command_name = "SET_STATE";
+
+            const state = { };
+            state.player_name = []
+            state.player_name[0] = "Alice"
+            state.player_name[1] = null
+
+            const key = nanogame.broker.next_key(nanogame.broker.__key);
+
+            const command_input = {key:key, state: state};
+
+            const command_output_reader = function(command_output){
+                if ( command_output === "OK" ) {
+                    nanogame.broker.__key = key;
+                    nanogame.broker.__state = state;
+
+                } else if ( command_output === "NOK" ) {
+                    const command_name = "GET_STATE";
+                    const command_input = null;
+                    const command_output_reader = function(command_output){
+                        nanogame.broker.__key = command_output.key;
+                        nanogame.broker.__state = command_output.state;
+                        nanogame.broker.start();
+                    };
+                    nanogame.server.request(command_name, command_input, command_output_reader);
+                    return;
+                };
+                nanogame.broker.start();
+            }
+            nanogame.server.request(command_name, command_input, command_output_reader);
+            return;
+        }
+
+        nanogame.presenter.show_roles_zone(true);
+        nanogame.presenter.show_client_name(true);
+
+        if ( nanogame.broker.__user_name === null ) {
             const command_name = "NEW_PLAYER";
             const command_input = null;
             const command_output_reader = function(command_output){
-                nanogame.broker.served_player = command_output;
-                nanogame.presenter.set_client_player_name(nanogame.broker.served_player);
+                nanogame.broker.__user_name = command_output;
+                nanogame.presenter.set_client_name(nanogame.broker.__user_name);
                 nanogame.broker.start();
             }
             nanogame.server.request(command_name, command_input, command_output_reader);
@@ -66,10 +139,10 @@ nanogame.broker.start = function(){
         }
     } else {
         nanogame.presenter.show_roles_zone(true);
-        nanogame.presenter.show_player_name(false);
+        nanogame.presenter.show_client_name(false);
 
-        nanogame.presenter.set_player_name(0, "Alice");
-        nanogame.presenter.set_player_name(1, "Bob");
+        nanogame.presenter.set_user_name(0, "Alice");
+        nanogame.presenter.set_user_name(1, "Bob");
 
         nanogame.presenter.set_role_options(0, ["Black", "White"]);
         nanogame.presenter.set_role_options(1, ["Black", "White"]);
